@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
 function Login() {
@@ -25,19 +25,25 @@ function Login() {
         formData.email,
         formData.password
       );
+      const role = response.data.role;
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('role', response.data.role);
+      localStorage.setItem('role', role);
       localStorage.setItem('fullName', response.data.fullName);
       alert(`Welcome back, ${response.data.fullName}!`);
-      navigate('/dashboard');
+      
+      if (role === 'ADMIN') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid Credentials.');
     } finally {
       setLoading(false);
     }
-  };
+  }; // Fixed: Kept only the one necessary brace for handleSubmit
 
- return (
+  return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
