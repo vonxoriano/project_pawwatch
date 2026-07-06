@@ -44,14 +44,17 @@ function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
+          <div className="logo-icon">🐾</div>
           <h1>PawWatch</h1>
           <p>Animal Adoption Management System</p>
         </div>
+        <hr className="auth-divider" />
 
         <h2>Create an Account</h2>
+        <p className="auth-subtitle">Join PawWatch and find your perfect companion</p>
 
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+        {error && <div className="error-message">⚠️ {error}</div>}
+        {success && <div className="success-message">✅ {success}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -65,31 +68,28 @@ function Register() {
               required
             />
           </div>
-
           <div className="form-group">
             <label>Email Address</label>
             <input
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
-
           <div className="form-group">
             <label>Contact Number</label>
             <input
               type="text"
               name="contactNumber"
-              placeholder="Enter your contact number"
+              placeholder="09XXXXXXXXX"
               value={formData.contactNumber}
               onChange={handleChange}
               required
             />
           </div>
-
           <div className="form-group">
             <label>Password</label>
             <input
@@ -101,14 +101,13 @@ function Register() {
               required
             />
           </div>
-
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Creating Account...' : 'Register'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
         <div className="auth-footer">
-          Already have an account? <Link to="/login">Log in</Link>
+          Already have an account? <a href="/login">Log in here</a>
         </div>
       </div>
     </div>
