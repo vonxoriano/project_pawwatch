@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PawwatchApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(PawwatchApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(PawwatchApplication.class, args);
+    }
 }
