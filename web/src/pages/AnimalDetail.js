@@ -2,24 +2,46 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import animalService from '../services/animalService';
+import applicationService from '../services/applicationService';
 
 function AnimalDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [animal, setAnimal] = useState(null);
     const [error, setError] = useState('');
+    const [applying, setApplying] = useState(false);
+    const role = localStorage.getItem('role');
 
     useEffect(() => {
-    const fetchAnimal = async () => {
-        try {
-            const res = await animalService.getAnimalById(id);
-            setAnimal(res.data);
-        } catch (err) {
-            setError('Animal not found.');
-        }
-    };
-    fetchAnimal();
-}, [id]);
+        const fetchAnimal = async () => {
+            try {
+                const res = await animalService.getAnimalById(id);
+                setAnimal(res.data);
+            } catch (err) {
+                setError('Animal not found.');
+            }
+        };
+        fetchAnimal();
+    }, [id]);
+
+    const handleApply = async () => {
+    console.log('Apply clicked');
+    console.log('Animal ID:', animal.animalId);
+    console.log('Token:', localStorage.getItem('token'));
+    setApplying(true);
+    try {
+        const res = await applicationService.submitApplication(animal.animalId);
+        console.log('Response:', res);
+        alert('Application submitted successfully! You can track it in My Applications.');
+        navigate('/my-applications');
+    } catch (err) {
+        console.log('Error:', err);
+        console.log('Error response:', err.response);
+        alert(err.response?.data?.message || err.response?.data || 'Failed to submit application.');
+    } finally {
+        setApplying(false);
+    }
+};
 
     if (error) {
         return (
@@ -69,9 +91,24 @@ function AnimalDetail() {
                         <p className="detail-description">
                             {animal.description || 'No description available.'}
                         </p>
-                        <span className="status-badge status-available">
-                            {animal.adoptionStatus}
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                            <span className={`status-badge ${
+                                animal.adoptionStatus === 'AVAILABLE' ? 'status-available' :
+                                animal.adoptionStatus === 'PENDING' ? 'status-pending' :
+                                'status-adopted'
+                            }`}>
+                                {animal.adoptionStatus}
+                            </span>
+                            {role === 'ADOPTER' && animal.adoptionStatus === 'AVAILABLE' && (
+                                <button
+                                    className="btn-primary"
+                                    style={{ width: 'auto', padding: '10px 28px' }}
+                                    onClick={handleApply}
+                                    disabled={applying}>
+                                    {applying ? 'Submitting...' : '🐾 Adopt Me'}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

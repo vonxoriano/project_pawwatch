@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import AnimalCard from '../components/AnimalCard';
 import animalService from '../services/animalService';
 
 function AdopterDashboard() {
+    const navigate = useNavigate();
+
     const [animals, setAnimals] = useState([]);
     const [keyword, setKeyword] = useState('');
     const [species, setSpecies] = useState('');
@@ -39,6 +42,9 @@ function AdopterDashboard() {
             <div className="dashboard-body">
                 <div className="page-header">
                     <h2>Find Your Companion 🐾</h2>
+                    <button className="btn-secondary" onClick={() => navigate('/my-applications')}>
+                        My Applications
+                    </button>
                 </div>
 
                 {error && <div className="error-message">{error}</div>}
