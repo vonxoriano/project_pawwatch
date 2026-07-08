@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import AnimalTable from '../components/AnimalTable';
 import AnimalModal from '../components/AnimalModal';
 import ApplicationsTable from '../components/ApplicationsTable';
-import animalService from '../services/animalService';
+import animalService from '../features/animal/animalService';
 import applicationService from '../services/applicationService';
 
 function AdminDashboard() {

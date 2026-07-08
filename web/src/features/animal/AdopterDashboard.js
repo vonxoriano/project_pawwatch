@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import AnimalCard from '../components/AnimalCard';
-import animalService from '../services/animalService';
+import Navbar from '../../components/Navbar';
+import AnimalCard from './AnimalCard';
+import animalService from './animalService';
 
 function AdopterDashboard() {
     const navigate = useNavigate();

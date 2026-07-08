@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Register from './features/auth/Register';
 import Login from './features/auth/Login';
 import AdminDashboard from './pages/AdminDashboard';
-import AdopterDashboard from './pages/AdopterDashboard';
-import AnimalDetail from './pages/AnimalDetail';
+import AdopterDashboard from './features/animal/AdopterDashboard';
+import AnimalDetail from './features/animal/AnimalDetail';
 import MyApplications from './pages/MyApplications';
 console.log('MyApplications import:', MyApplications);
 
