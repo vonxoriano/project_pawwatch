@@ -5,7 +5,7 @@ import Login from './features/auth/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import AdopterDashboard from './features/animal/AdopterDashboard';
 import AnimalDetail from './features/animal/AnimalDetail';
-import MyApplications from './pages/MyApplications';
+import MyApplications from './features/application/MyApplications';
 console.log('MyApplications import:', MyApplications);
 
 const PrivateRoute = ({ children }) => {

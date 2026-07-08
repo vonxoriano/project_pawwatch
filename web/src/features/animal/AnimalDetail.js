@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import animalService from './animalService';
-import applicationService from '../../services/applicationService';
+import applicationService from '../application/applicationService';
 function AnimalDetail() {
     const { id } = useParams();
     const navigate = useNavigate();

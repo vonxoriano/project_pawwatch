@@ -4,7 +4,7 @@ import AnimalTable from '../components/AnimalTable';
 import AnimalModal from '../components/AnimalModal';
 import ApplicationsTable from '../components/ApplicationsTable';
 import animalService from '../features/animal/animalService';
-import applicationService from '../services/applicationService';
+import applicationService from '../features/application/applicationService';
 
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('animals');
