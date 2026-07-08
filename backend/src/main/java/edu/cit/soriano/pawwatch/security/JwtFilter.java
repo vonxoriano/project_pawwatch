@@ -1,9 +1,8 @@
 package edu.cit.soriano.pawwatch.security;
 
 
-
-import edu.cit.soriano.pawwatch.repository.UserRepository;
-import edu.cit.soriano.pawwatch.model.User;
+import edu.cit.soriano.pawwatch.feature.auth.UserRepository;
+import edu.cit.soriano.pawwatch.feature.auth.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

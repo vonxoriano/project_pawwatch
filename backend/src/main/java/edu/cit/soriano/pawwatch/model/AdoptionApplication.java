@@ -2,6 +2,8 @@ package edu.cit.soriano.pawwatch.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import edu.cit.soriano.pawwatch.feature.auth.User;
 
 @Entity
 @Table(name = "adoption_applications")
@@ -13,10 +15,12 @@ public class AdoptionApplication {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"password", "createdAt"})
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "animal_id", nullable = false)
+    @JsonIgnoreProperties({"description", "healthStatus"})
     private Animal animal;
 
     @Column(nullable = false)
