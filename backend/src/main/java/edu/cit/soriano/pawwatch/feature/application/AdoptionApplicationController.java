@@ -1,9 +1,7 @@
-package edu.cit.soriano.pawwatch.controller;
+package edu.cit.soriano.pawwatch.feature.application;
 
-import edu.cit.soriano.pawwatch.dto.ApplicationRequest;
-import edu.cit.soriano.pawwatch.dto.ApplicationStatusRequest;
-import edu.cit.soriano.pawwatch.model.AdoptionApplication;
-import edu.cit.soriano.pawwatch.service.AdoptionApplicationService;
+import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationRequest;
+import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationStatusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

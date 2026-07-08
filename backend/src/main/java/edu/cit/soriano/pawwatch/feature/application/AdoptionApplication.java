@@ -1,4 +1,4 @@
-package edu.cit.soriano.pawwatch.model;
+package edu.cit.soriano.pawwatch.feature.application;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package edu.cit.soriano.pawwatch.dto;
+package edu.cit.soriano.pawwatch.feature.application.dto;
 
 public class ApplicationStatusRequest {
 

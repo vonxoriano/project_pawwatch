@@ -1,12 +1,10 @@
-package edu.cit.soriano.pawwatch.service;
+package edu.cit.soriano.pawwatch.feature.application;
 
-import edu.cit.soriano.pawwatch.dto.ApplicationRequest;
-import edu.cit.soriano.pawwatch.dto.ApplicationStatusRequest;
-import edu.cit.soriano.pawwatch.model.AdoptionApplication;
+import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationRequest;
+import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationStatusRequest;
 import edu.cit.soriano.pawwatch.feature.animal.Animal;
-import edu.cit.soriano.pawwatch.feature.animal.AnimalRepository;
 import edu.cit.soriano.pawwatch.feature.auth.User;
-import edu.cit.soriano.pawwatch.repository.AdoptionApplicationRepository;
+import edu.cit.soriano.pawwatch.feature.animal.AnimalRepository;
 import edu.cit.soriano.pawwatch.feature.auth.UserRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,5 @@
-package edu.cit.soriano.pawwatch.repository;
+package edu.cit.soriano.pawwatch.feature.application;
 
-import edu.cit.soriano.pawwatch.model.AdoptionApplication;
 import edu.cit.soriano.pawwatch.feature.auth.User;
 import edu.cit.soriano.pawwatch.feature.animal.Animal;
 import org.springframework.data.jpa.repository.JpaRepository;
