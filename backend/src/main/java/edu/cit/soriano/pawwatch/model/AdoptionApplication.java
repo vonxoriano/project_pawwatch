@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.cit.soriano.pawwatch.feature.auth.User;
+import edu.cit.soriano.pawwatch.feature.animal.Animal;
 
 @Entity
 @Table(name = "adoption_applications")
