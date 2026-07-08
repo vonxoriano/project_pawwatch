@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import AnimalTable from '../components/AnimalTable';
-import AnimalModal from '../components/AnimalModal';
-import ApplicationsTable from '../components/ApplicationsTable';
-import animalService from '../features/animal/animalService';
-import applicationService from '../features/application/applicationService';
+import Navbar from '../../components/Navbar';
+import AnimalTable from './AnimalTable';
+import AnimalModal from './AnimalModal';
+import ApplicationsTable from './ApplicationsTable';
+import animalService from '../animal/animalService';
+import applicationService from '../application/applicationService';
 
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('animals');

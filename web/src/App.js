@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from './features/auth/Register';
 import Login from './features/auth/Login';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './features/admin/AdminDashboard';
 import AdopterDashboard from './features/animal/AdopterDashboard';
 import AnimalDetail from './features/animal/AnimalDetail';
 import MyApplications from './features/application/MyApplications';
