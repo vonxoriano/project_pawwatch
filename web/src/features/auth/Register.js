@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import authService from '../services/authService';
+import authService from './authService';
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    fullName: '',
     email: '',
+    contactNumber: '',
     password: ''
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -18,30 +21,24 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     try {
-      const response = await authService.login(
+      await authService.register(
+        formData.fullName,
         formData.email,
+        formData.contactNumber,
         formData.password
       );
-      const role = response.data.role;
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('role', role);
-      localStorage.setItem('fullName', response.data.fullName);
-      alert(`Welcome back, ${response.data.fullName}!`);
-      
-      if (role === 'ADMIN') {
-        navigate('/admin');
-      } else {
-        navigate('/dashboard');
-      }
+      alert('Account created successfully! Please log in.');
+      navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid Credentials.');
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
-  }; // Fixed: Kept only the one necessary brace for handleSubmit
+  };
 
   return (
     <div className="auth-container">
@@ -53,12 +50,24 @@ function Login() {
         </div>
         <hr className="auth-divider" />
 
-        <h2>Welcome Back</h2>
-        <p className="auth-subtitle">Log in to continue to your account</p>
+        <h2>Create an Account</h2>
+        <p className="auth-subtitle">Join PawWatch and find your perfect companion</p>
 
         {error && <div className="error-message">⚠️ {error}</div>}
+        {success && <div className="success-message">✅ {success}</div>}
 
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Enter your full name"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div className="form-group">
             <label>Email Address</label>
             <input
@@ -71,27 +80,38 @@ function Login() {
             />
           </div>
           <div className="form-group">
+            <label>Contact Number</label>
+            <input
+              type="text"
+              name="contactNumber"
+              placeholder="09XXXXXXXXX"
+              value={formData.contactNumber}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
             <label>Password</label>
             <input
               type="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="Create a password"
               value={formData.password}
               onChange={handleChange}
               required
             />
           </div>
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Logging in...' : 'Log In'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <a href="/register">Register here</a>
+          Already have an account? <a href="/login">Log in here</a>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;

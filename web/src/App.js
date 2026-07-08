@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
+import Register from './features/auth/Register';
+import Login from './features/auth/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import AdopterDashboard from './pages/AdopterDashboard';
 import AnimalDetail from './pages/AnimalDetail';
