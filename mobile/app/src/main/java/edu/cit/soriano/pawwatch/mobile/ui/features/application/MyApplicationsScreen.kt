@@ -95,4 +95,4 @@ fun MyApplicationsScreen(onBack: () -> Unit) {
             }
         }
     }
-}
+}// Application feature slice - handles adoption application tracking
