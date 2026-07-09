@@ -26,6 +26,8 @@ import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
+
+// Admin feature slice - handles animal management and application processing
 @Composable
 fun AdminDashboardScreen(onLogout: () -> Unit) {
     val context = LocalContext.current
