@@ -150,3 +150,5 @@ fun AnimalBrowseScreen(
         }
     }
 }
+
+// Animal feature slice - handles animal browsing and search
