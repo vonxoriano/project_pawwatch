@@ -1,9 +1,14 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package edu.cit.soriano.pawwatch.mobile.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,10 +22,10 @@ import edu.cit.soriano.pawwatch.mobile.model.Animal
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
 import edu.cit.soriano.pawwatch.mobile.ui.components.AnimalCard
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
-import edu.cit.soriano.pawwatch.mobile.ui.components.PawWatchTopBar
+import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
+import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalBrowseScreen(
     onAnimalClick: (Long) -> Unit,
@@ -53,8 +58,12 @@ fun AnimalBrowseScreen(
 
     LaunchedEffect(Unit) { fetchAnimals() }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        PawWatchTopBar(onLogout = onLogout)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PawWatchColors.Background)
+    ) {
+        TopBar(onLogout = onLogout)
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -62,20 +71,32 @@ fun AnimalBrowseScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Find Your Companion",
-                    fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                TextButton(onClick = onMyApplicationsClick) {
-                    Text("My Applications", color = Color(0xFFFF6B2C))
-                }
+                Text(
+                    "🐾 Find Your Companion",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PawWatchColors.TextDark
+                )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedButton(
+                onClick = onMyApplicationsClick,
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
+            ) {
+                Text("My Applications", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextField(
                 value = keyword,
                 onValueChange = { keyword = it },
                 label = { Text("Search by name or breed") },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(10.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -84,20 +105,26 @@ fun AnimalBrowseScreen(
                     FilterChip(
                         selected = species == value,
                         onClick = { species = value },
-                        label = { Text(label) }
+                        label = { Text(label) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = PawWatchColors.Primary,
+                            selectedLabelColor = Color.White
+                        )
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
                     onClick = { fetchAnimals() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6B2C)),
+                    colors = ButtonDefaults.buttonColors(containerColor = PawWatchColors.Primary),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.weight(1f)
                 ) { Text("Search") }
                 OutlinedButton(
                     onClick = { keyword = ""; species = ""; fetchAnimals() },
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.weight(1f)
                 ) { Text("Reset") }
             }
@@ -107,12 +134,15 @@ fun AnimalBrowseScreen(
             LoadingIndicator()
         } else if (animals.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No animals available right now.", color = Color.Gray)
+                Text("No animals available right now.", color = PawWatchColors.TextGray)
             }
         } else {
-            LazyColumn(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
                 items(animals) { animal ->
                     AnimalCard(animal = animal, onClick = { onAnimalClick(animal.animalId) })

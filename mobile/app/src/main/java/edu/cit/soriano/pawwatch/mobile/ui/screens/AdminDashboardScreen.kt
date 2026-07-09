@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package edu.cit.soriano.pawwatch.mobile.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,8 +20,9 @@ import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.*
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
-import edu.cit.soriano.pawwatch.mobile.ui.components.PawWatchTopBar
+import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
 import edu.cit.soriano.pawwatch.mobile.ui.components.StatusBadge
+import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -30,7 +34,7 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
     val token = "Bearer ${sessionManager.getToken()}"
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("🐾 Animals", "📋 Applications")
+    val tabs = listOf("🐾 Animal Listings", "📋 Applications")
 
     var animals by remember { mutableStateOf(listOf<Animal>()) }
     var applications by remember { mutableStateOf(listOf<AdoptionApplication>()) }
@@ -66,13 +70,17 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
         loading = false
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        PawWatchTopBar(onLogout = onLogout)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PawWatchColors.Background)
+    ) {
+        TopBar(userLabel = "Admin: Admin", onLogout = onLogout)
 
         TabRow(
             selectedTabIndex = selectedTab,
             containerColor = Color.White,
-            contentColor = Color(0xFFFF6B2C)
+            contentColor = PawWatchColors.Primary
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
@@ -80,19 +88,15 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
                     onClick = { selectedTab = index },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(title)
+                            Text(title, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                             if (index == 1) {
                                 val pending = applications.count { it.status == "PENDING" }
                                 if (pending > 0) {
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Surface(
-                                        color = Color(0xFFFF6B2C),
-                                        shape = RoundedCornerShape(20.dp)
-                                    ) {
+                                    Surface(color = PawWatchColors.Primary, shape = RoundedCornerShape(20.dp)) {
                                         Text(
                                             "$pending",
-                                            modifier = Modifier.padding(
-                                                horizontal = 6.dp, vertical = 2.dp),
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                             fontSize = 11.sp,
                                             color = Color.White,
                                             fontWeight = FontWeight.Bold
@@ -119,13 +123,11 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
                             try {
                                 val res = RetrofitClient.apiService.deleteAnimal(token, animalId)
                                 if (res.isSuccessful) {
-                                    Toast.makeText(context, "Animal removed.",
-                                        Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Animal removed.", Toast.LENGTH_SHORT).show()
                                     fetchAnimals()
                                 }
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Failed to delete.",
-                                    Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Failed to delete.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -136,19 +138,15 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
                         scope.launch {
                             try {
                                 val res = RetrofitClient.apiService.processApplication(
-                                    token, appId,
-                                    ApplicationStatusRequest(status, remarks)
+                                    token, appId, ApplicationStatusRequest(status, remarks)
                                 )
                                 if (res.isSuccessful) {
-                                    Toast.makeText(context,
-                                        "Application ${status.lowercase()}.",
-                                        Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Application ${status.lowercase()}.", Toast.LENGTH_SHORT).show()
                                     fetchApplications()
                                     fetchAnimals()
                                 }
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Failed to process.",
-                                    Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Failed to process.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -165,21 +163,17 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
                 scope.launch {
                     try {
                         if (editingAnimal != null) {
-                            RetrofitClient.apiService.editAnimal(
-                                token, editingAnimal!!.animalId, request)
-                            Toast.makeText(context, "Animal updated.",
-                                Toast.LENGTH_SHORT).show()
+                            RetrofitClient.apiService.editAnimal(token, editingAnimal!!.animalId, request)
+                            Toast.makeText(context, "Animal updated.", Toast.LENGTH_SHORT).show()
                         } else {
                             RetrofitClient.apiService.addAnimal(token, request)
-                            Toast.makeText(context, "Animal added.",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Animal added.", Toast.LENGTH_SHORT).show()
                         }
                         showAddDialog = false
                         editingAnimal = null
                         fetchAnimals()
                     } catch (e: Exception) {
-                        Toast.makeText(context, "Failed to save.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Failed to save.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -200,17 +194,18 @@ fun AnimalsTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Animal Listings", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text("Animal Listings", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = PawWatchColors.TextDark)
             Button(
                 onClick = onAdd,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6B2C))
-            ) { Text("+ Add") }
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = PawWatchColors.Primary)
+            ) { Text("+ Add Animal") }
         }
         Spacer(modifier = Modifier.height(12.dp))
 
         if (animals.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No animals listed yet.", color = Color.Gray)
+                Text("No animals listed yet.", color = PawWatchColors.TextGray)
             }
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -230,8 +225,9 @@ fun AnimalsTab(
 fun AdminAnimalCard(animal: Animal, onEdit: () -> Unit, onDelete: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -239,32 +235,32 @@ fun AdminAnimalCard(animal: Animal, onEdit: () -> Unit, onDelete: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(animal.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(animal.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = PawWatchColors.TextDark)
                 StatusBadge(status = animal.adoptionStatus)
             }
             Text(
                 "${animal.species} · ${animal.breed} · ${animal.age} yrs · ${animal.gender}",
-                fontSize = 13.sp, color = Color.Gray
+                fontSize = 13.sp, color = PawWatchColors.TextGray
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = onEdit,
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF3498DB))
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.EditBlue)
                 ) { Text("Edit") }
                 OutlinedButton(
                     onClick = onDelete,
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFE53935))
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.DeleteRed)
                 ) { Text("Delete") }
             }
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ApplicationsTab(
     applications: List<AdoptionApplication>,
@@ -272,29 +268,25 @@ fun ApplicationsTab(
 ) {
     val remarks = remember { mutableStateMapOf<Long, String>() }
 
-    if (applications.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No applications yet.", color = Color.Gray)
-        }
-    } else {
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(applications) { app ->
-                AdminApplicationCard(
-                    application = app,
-                    remarks = remarks[app.applicationId] ?: "",
-                    onRemarksChange = { remarks[app.applicationId] = it },
-                    onApprove = {
-                        onProcess(app.applicationId, "APPROVED",
-                            remarks[app.applicationId] ?: "")
-                    },
-                    onReject = {
-                        onProcess(app.applicationId, "REJECTED",
-                            remarks[app.applicationId] ?: "")
-                    }
-                )
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Adoption Applications", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = PawWatchColors.TextDark)
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (applications.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No applications yet.", color = PawWatchColors.TextGray)
+            }
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(applications) { app ->
+                    AdminApplicationCard(
+                        application = app,
+                        remarks = remarks[app.applicationId] ?: "",
+                        onRemarksChange = { remarks[app.applicationId] = it },
+                        onApprove = { onProcess(app.applicationId, "APPROVED", remarks[app.applicationId] ?: "") },
+                        onReject = { onProcess(app.applicationId, "REJECTED", remarks[app.applicationId] ?: "") }
+                    )
+                }
             }
         }
     }
@@ -310,8 +302,9 @@ fun AdminApplicationCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -320,52 +313,49 @@ fun AdminApplicationCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(application.animal.name,
-                        fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    Text("by ${application.user?.fullName ?: "Unknown"}",
-                        fontSize = 12.sp, color = Color.Gray)
+                    Text(application.animal.name, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = PawWatchColors.TextDark)
+                    Text("by ${application.user?.fullName ?: "Unknown"}", fontSize = 12.sp, color = PawWatchColors.TextGray)
                 }
                 StatusBadge(status = application.status)
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Text("${application.animal.species} · ${application.animal.breed}",
-                fontSize = 13.sp, color = Color.Gray)
+            Text("${application.animal.species} · ${application.animal.breed}", fontSize = 13.sp, color = PawWatchColors.TextGray)
 
             if (application.status == "PENDING") {
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     value = remarks,
                     onValueChange = onRemarksChange,
-                    label = { Text("Remarks (optional)") },
+                    label = { Text("Add remarks...") },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(
+                    OutlinedButton(
                         onClick = onApprove,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2E7D32))
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.EditBlue)
                     ) { Text("Approve") }
                     OutlinedButton(
                         onClick = onReject,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color(0xFFE53935))
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.DeleteRed)
                     ) { Text("Reject") }
                 }
             } else {
                 application.remarks?.let {
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text("Remarks: $it", fontSize = 13.sp, color = Color.DarkGray)
+                    Text("Remarks: $it", fontSize = 13.sp, color = PawWatchColors.TextGray)
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalFormDialog(
     animal: Animal?,
@@ -385,62 +375,33 @@ fun AnimalFormDialog(
         onDismissRequest = onDismiss,
         title = { Text(if (animal != null) "Edit Animal" else "Add New Animal") },
         text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedTextField(value = name, onValueChange = { name = it },
-                    label = { Text("Name") }, modifier = Modifier.fillMaxWidth())
-
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") }, modifier = Modifier.fillMaxWidth())
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf("CAT", "DOG").forEach { s ->
-                        FilterChip(selected = species == s, onClick = { species = s },
-                            label = { Text(s) })
+                        FilterChip(selected = species == s, onClick = { species = s }, label = { Text(s) })
                     }
                 }
-
-                OutlinedTextField(value = breed, onValueChange = { breed = it },
-                    label = { Text("Breed") }, modifier = Modifier.fillMaxWidth())
-
-                OutlinedTextField(value = age, onValueChange = { age = it },
-                    label = { Text("Age") }, modifier = Modifier.fillMaxWidth())
-
+                OutlinedTextField(value = breed, onValueChange = { breed = it }, label = { Text("Breed") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = age, onValueChange = { age = it }, label = { Text("Age") }, modifier = Modifier.fillMaxWidth())
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf("MALE", "FEMALE").forEach { g ->
-                        FilterChip(selected = gender == g, onClick = { gender = g },
-                            label = { Text(g) })
+                        FilterChip(selected = gender == g, onClick = { gender = g }, label = { Text(g) })
                     }
                 }
-
-                OutlinedTextField(value = healthStatus, onValueChange = { healthStatus = it },
-                    label = { Text("Health Status") }, modifier = Modifier.fillMaxWidth())
-
-                OutlinedTextField(value = description, onValueChange = { description = it },
-                    label = { Text("Description") }, modifier = Modifier.fillMaxWidth())
-
-                OutlinedTextField(value = photo, onValueChange = { photo = it },
-                    label = { Text("Photo URL") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = healthStatus, onValueChange = { healthStatus = it }, label = { Text("Health Status") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = photo, onValueChange = { photo = it }, label = { Text("Photo URL") }, modifier = Modifier.fillMaxWidth())
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    onSave(AnimalRequest(
-                        name = name,
-                        species = species,
-                        breed = breed,
-                        age = age.toIntOrNull() ?: 0,
-                        gender = gender,
-                        description = description,
-                        healthStatus = healthStatus,
-                        photo = photo
-                    ))
+                    onSave(AnimalRequest(name, species, breed, age.toIntOrNull() ?: 0, gender, description, healthStatus, photo))
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6B2C))
+                colors = ButtonDefaults.buttonColors(containerColor = PawWatchColors.Primary)
             ) { Text(if (animal != null) "Save Changes" else "Add Animal") }
         },
-        dismissButton = {
-            OutlinedButton(onClick = onDismiss) { Text("Cancel") }
-        }
+        dismissButton = { OutlinedButton(onClick = onDismiss) { Text("Cancel") } }
     )
 }
