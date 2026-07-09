@@ -13,7 +13,6 @@ import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalBrowseScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalDetailScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.LoginScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.RegisterScreen
-import edu.cit.soriano.pawwatch.mobile.ui.screens.*
 
 object Routes {
     const val LOGIN = "login"
