@@ -1,5 +1,6 @@
 package edu.cit.soriano.pawwatch.mobile.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -10,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import android.widget.Toast
 import edu.cit.soriano.pawwatch.mobile.model.LoginRequest
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit,
+    onLoginSuccess: (String) -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
     val context = LocalContext.current
@@ -36,8 +36,10 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("PawWatch Login", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(24.dp))
+        Text("🐾 PawWatch", style = MaterialTheme.typography.headlineMedium)
+        Text("Animal Adoption Management System",
+            style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = email,
@@ -71,13 +73,16 @@ fun LoginScreen(
                         if (response.isSuccessful && response.body() != null) {
                             val body = response.body()!!
                             sessionManager.saveSession(body.token, body.role, body.fullName)
-                            Toast.makeText(context, "Welcome back, ${body.fullName}!", Toast.LENGTH_SHORT).show()
-                            onLoginSuccess()
+                            Toast.makeText(context, "Welcome back, ${body.fullName}!",
+                                Toast.LENGTH_SHORT).show()
+                            onLoginSuccess(body.role)
                         } else {
-                            Toast.makeText(context, "Invalid email or password.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Invalid email or password.",
+                                Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Connection error: ${e.message}",
+                            Toast.LENGTH_LONG).show()
                     } finally {
                         loading = false
                     }
