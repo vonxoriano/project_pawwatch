@@ -1,4 +1,4 @@
-package edu.cit.soriano.pawwatch.mobile.ui.screens
+package edu.cit.soriano.pawwatch.mobile.ui.features.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*

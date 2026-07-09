@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package edu.cit.soriano.pawwatch.mobile.ui.screens
+package edu.cit.soriano.pawwatch.mobile.ui.features.admin
 
 import android.widget.Toast
 import androidx.compose.foundation.background

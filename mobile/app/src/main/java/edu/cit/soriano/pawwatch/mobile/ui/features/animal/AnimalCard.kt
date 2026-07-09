@@ -1,6 +1,6 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class)
-package edu.cit.soriano.pawwatch.mobile.ui.components
+package edu.cit.soriano.pawwatch.mobile.ui.features.animal
 
 
 import androidx.compose.foundation.layout.*
@@ -10,13 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import edu.cit.soriano.pawwatch.mobile.model.Animal
+import edu.cit.soriano.pawwatch.mobile.ui.components.StatusBadge
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 
 @Composable

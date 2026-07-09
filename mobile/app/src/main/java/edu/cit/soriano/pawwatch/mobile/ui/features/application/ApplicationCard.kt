@@ -1,4 +1,4 @@
-package edu.cit.soriano.pawwatch.mobile.ui.components
+package edu.cit.soriano.pawwatch.mobile.ui.features.application
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.AdoptionApplication
+import edu.cit.soriano.pawwatch.mobile.ui.components.StatusBadge
 
 @Composable
 fun ApplicationCard(

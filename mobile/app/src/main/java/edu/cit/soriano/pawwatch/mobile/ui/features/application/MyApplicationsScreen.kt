@@ -1,4 +1,4 @@
-package edu.cit.soriano.pawwatch.mobile.ui.screens
+package edu.cit.soriano.pawwatch.mobile.ui.features.application
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
-import edu.cit.soriano.pawwatch.mobile.ui.components.ApplicationCard
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch

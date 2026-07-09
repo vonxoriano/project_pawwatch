@@ -7,6 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import edu.cit.soriano.pawwatch.mobile.ui.features.admin.AdminDashboardScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.application.MyApplicationsScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalBrowseScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalDetailScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.auth.LoginScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.auth.RegisterScreen
 import edu.cit.soriano.pawwatch.mobile.ui.screens.*
 
 object Routes {

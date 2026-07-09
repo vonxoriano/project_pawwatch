@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package edu.cit.soriano.pawwatch.mobile.ui.screens
+package edu.cit.soriano.pawwatch.mobile.ui.features.animal
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.Animal
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
-import edu.cit.soriano.pawwatch.mobile.ui.components.AnimalCard
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
 import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
