@@ -6,9 +6,12 @@ import edu.cit.soriano.pawwatch.feature.animal.Animal;
 import edu.cit.soriano.pawwatch.feature.auth.User;
 import edu.cit.soriano.pawwatch.feature.animal.AnimalRepository;
 import edu.cit.soriano.pawwatch.feature.auth.UserRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static edu.cit.soriano.pawwatch.feature.application.AdoptionApplicationSpecification.*;
 
 @Service
 public class AdoptionApplicationService {
@@ -61,6 +64,14 @@ public class AdoptionApplicationService {
 
     public List<AdoptionApplication> getAllApplications() {
         return applicationRepository.findAll();
+    }
+
+    public List<AdoptionApplication> filterApplications(String status, String keyword) {
+        Specification<AdoptionApplication> spec = Specification
+                .where(hasStatus(status))
+                .and(keywordMatches(keyword));
+
+        return applicationRepository.findAll(spec);
     }
 
     public AdoptionApplication processApplication(Long applicationId, ApplicationStatusRequest request) {

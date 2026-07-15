@@ -13,6 +13,8 @@ function AdminDashboard() {
     const [showModal, setShowModal] = useState(false);
     const [editingAnimal, setEditingAnimal] = useState(null);
     const [error, setError] = useState('');
+    const [appStatus, setAppStatus] = useState('');
+    const [appKeyword, setAppKeyword] = useState('');
 
     useEffect(() => {
         fetchAnimals();
@@ -28,13 +30,24 @@ function AdminDashboard() {
         }
     };
 
-    const fetchApplications = async () => {
+    const fetchApplications = async (status = '', keyword = '') => {
         try {
-            const res = await applicationService.getAllApplications();
+            const res = await applicationService.getAllApplications(status, keyword);
             setApplications(res.data);
         } catch (err) {
             setError('Failed to load applications.');
         }
+    };
+
+    const handleAppFilter = (e) => {
+        e.preventDefault();
+        fetchApplications(appStatus, appKeyword);
+    };
+
+    const handleAppReset = () => {
+        setAppStatus('');
+        setAppKeyword('');
+        fetchApplications('', '');
     };
 
     const openAddModal = () => {
@@ -81,7 +94,7 @@ function AdminDashboard() {
             try {
                 await applicationService.processApplication(id, status, remarks);
                 alert(`Application ${status.toLowerCase()} successfully!`);
-                fetchApplications();
+                fetchApplications(appStatus, appKeyword);
                 fetchAnimals();
             } catch (err) {
                 alert('Failed to process application.');
@@ -155,6 +168,27 @@ function AdminDashboard() {
                         <div className="page-header">
                             <h2>Adoption Applications</h2>
                         </div>
+                        <form className="search-bar" onSubmit={handleAppFilter} style={{ marginBottom: '20px' }}>
+                            <input
+                                type="text"
+                                placeholder="Search by applicant or animal name..."
+                                value={appKeyword}
+                                onChange={(e) => setAppKeyword(e.target.value)}
+                            />
+                            <select value={appStatus} onChange={(e) => setAppStatus(e.target.value)}>
+                                <option value="">All Statuses</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                            </select>
+                            <button type="submit" className="btn-primary"
+                                style={{ width: 'auto', padding: '10px 24px' }}>
+                                Filter
+                            </button>
+                            <button type="button" className="btn-secondary" onClick={handleAppReset}>
+                                Reset
+                            </button>
+                        </form>
                         <ApplicationsTable
                             applications={applications}
                             onProcess={handleProcess}

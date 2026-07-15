@@ -42,11 +42,16 @@ public class AdoptionApplicationController {
         return ResponseEntity.ok("Application cancelled successfully");
     }
 
-    // Admin - view all applications
+    // Admin - view all applications (with optional status/keyword filter)
     @GetMapping("/admin/all")
-    public ResponseEntity<List<AdoptionApplication>> getAllApplications() {
-        return ResponseEntity.ok(applicationService.getAllApplications());
+    public ResponseEntity<List<AdoptionApplication>> getAllApplications(
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) String keyword) {
+    if ((status != null && !status.isEmpty()) || (keyword != null && !keyword.isEmpty())) {
+        return ResponseEntity.ok(applicationService.filterApplications(status, keyword));
     }
+    return ResponseEntity.ok(applicationService.getAllApplications());
+}
 
     // Admin - approve or reject
     @PatchMapping("/admin/process/{id}")

@@ -23,8 +23,11 @@ const cancelApplication = (id) => {
     return axios.delete(`${API_URL}/cancel/${id}`, { headers: headers() });
 };
 
-const getAllApplications = () => {
-    return axios.get(`${API_URL}/admin/all`, { headers: headers() });
+const getAllApplications = (status, keyword) => {
+    const params = {};
+    if (status) params.status = status;
+    if (keyword) params.keyword = keyword;
+    return axios.get(`${API_URL}/admin/all`, { headers: headers(), params });
 };
 
 const processApplication = (id, status, remarks) => {
