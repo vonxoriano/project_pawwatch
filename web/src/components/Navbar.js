@@ -19,6 +19,14 @@ function Navbar() {
                 <h1>PawWatch</h1>
             </div>
             <div className="nav-right">
+                {role === 'ADOPTER' && (
+                    <span
+                        className="nav-user"
+                        onClick={() => navigate('/favorites')}
+                        style={{ cursor: 'pointer' }}>
+                        ❤️ Favorites
+                    </span>
+                )}
                 <span
                     className="nav-user"
                     onClick={() => navigate('/profile')}

@@ -7,6 +7,7 @@ import AdopterDashboard from './features/animal/AdopterDashboard';
 import AnimalDetail from './features/animal/AnimalDetail';
 import MyApplications from './features/application/MyApplications';
 import Profile from './features/auth/Profile';
+import FavoritesPage from './features/favorite/FavoritesPage';
 console.log('MyApplications import:', MyApplications);
 
 const PrivateRoute = ({ children }) => {
@@ -55,6 +56,11 @@ function App() {
                         <Profile />
                     </PrivateRoute>
                 } />
+                <Route path="/favorites" element={
+    <PrivateRoute>
+        <FavoritesPage />
+    </PrivateRoute>
+} />
             </Routes>
         </Router>
     );
