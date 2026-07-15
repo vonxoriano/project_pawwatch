@@ -76,6 +76,17 @@ public class AnimalService {
         return animalRepository.findAll(spec);
     }
 
+    public List<Animal> filterAvailableAnimals(String species, String gender, Integer minAge, Integer maxAge) {
+    Specification<Animal> spec = Specification
+            .where(AnimalSpecification.hasAdoptionStatus("AVAILABLE"))
+            .and(AnimalSpecification.hasSpecies(species))
+            .and(AnimalSpecification.hasGender(gender))
+            .and(AnimalSpecification.minAge(minAge))
+            .and(AnimalSpecification.maxAge(maxAge));
+
+    return animalRepository.findAll(spec);
+}
+
     public Animal getAnimalById(Long id) {
         return animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal not found"));

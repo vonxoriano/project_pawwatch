@@ -15,6 +15,8 @@ function AdminDashboard() {
     const [error, setError] = useState('');
     const [appStatus, setAppStatus] = useState('');
     const [appKeyword, setAppKeyword] = useState('');
+    const [appDateFrom, setAppDateFrom] = useState('');
+    const [appDateTo, setAppDateTo] = useState('');
 
     useEffect(() => {
         fetchAnimals();
@@ -30,9 +32,9 @@ function AdminDashboard() {
         }
     };
 
-    const fetchApplications = async (status = '', keyword = '') => {
+    const fetchApplications = async (status = '', keyword = '', dateFrom = '', dateTo = '') => {
         try {
-            const res = await applicationService.getAllApplications(status, keyword);
+            const res = await applicationService.getAllApplications(status, keyword, dateFrom, dateTo);
             setApplications(res.data);
         } catch (err) {
             setError('Failed to load applications.');
@@ -41,13 +43,15 @@ function AdminDashboard() {
 
     const handleAppFilter = (e) => {
         e.preventDefault();
-        fetchApplications(appStatus, appKeyword);
+        fetchApplications(appStatus, appKeyword, appDateFrom, appDateTo);
     };
 
     const handleAppReset = () => {
         setAppStatus('');
         setAppKeyword('');
-        fetchApplications('', '');
+        setAppDateFrom('');
+        setAppDateTo('');
+        fetchApplications('', '', '', '');
     };
 
     const openAddModal = () => {
@@ -94,7 +98,7 @@ function AdminDashboard() {
             try {
                 await applicationService.processApplication(id, status, remarks);
                 alert(`Application ${status.toLowerCase()} successfully!`);
-                fetchApplications(appStatus, appKeyword);
+                fetchApplications(appStatus, appKeyword, appDateFrom, appDateTo);
                 fetchAnimals();
             } catch (err) {
                 alert('Failed to process application.');
@@ -168,7 +172,7 @@ function AdminDashboard() {
                         <div className="page-header">
                             <h2>Adoption Applications</h2>
                         </div>
-                        <form className="search-bar" onSubmit={handleAppFilter} style={{ marginBottom: '20px' }}>
+                        <form className="search-bar" onSubmit={handleAppFilter} style={{ marginBottom: '20px', flexWrap: 'wrap' }}>
                             <input
                                 type="text"
                                 placeholder="Search by applicant or animal name..."
@@ -181,6 +185,18 @@ function AdminDashboard() {
                                 <option value="APPROVED">Approved</option>
                                 <option value="REJECTED">Rejected</option>
                             </select>
+                            <input
+                                type="date"
+                                value={appDateFrom}
+                                onChange={(e) => setAppDateFrom(e.target.value)}
+                                style={{ padding: '10px 12px' }}
+                            />
+                            <input
+                                type="date"
+                                value={appDateTo}
+                                onChange={(e) => setAppDateTo(e.target.value)}
+                                style={{ padding: '10px 12px' }}
+                            />
                             <button type="submit" className="btn-primary"
                                 style={{ width: 'auto', padding: '10px 24px' }}>
                                 Filter

@@ -10,6 +10,7 @@ function AdopterDashboard() {
     const [animals, setAnimals] = useState([]);
     const [keyword, setKeyword] = useState('');
     const [species, setSpecies] = useState('');
+    const [gender, setGender] = useState('');
     const [minAge, setMinAge] = useState('');
     const [maxAge, setMaxAge] = useState('');
     const [error, setError] = useState('');
@@ -18,9 +19,9 @@ function AdopterDashboard() {
         fetchAnimals();
     }, []);
 
-    const fetchAnimals = async (kw = '', sp = '', minA = '', maxA = '') => {
+    const fetchAnimals = async (kw = '', sp = '', gd = '', minA = '', maxA = '') => {
         try {
-            const res = await animalService.browseAnimals(kw, sp, minA, maxA);
+            const res = await animalService.browseAnimals(kw, sp, gd, minA, maxA);
             setAnimals(res.data);
         } catch (err) {
             setError('Failed to load animals.');
@@ -29,15 +30,16 @@ function AdopterDashboard() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchAnimals(keyword, species, minAge, maxAge);
+        fetchAnimals(keyword, species, gender, minAge, maxAge);
     };
 
     const handleReset = () => {
         setKeyword('');
         setSpecies('');
+        setGender('');
         setMinAge('');
         setMaxAge('');
-        fetchAnimals('', '', '', '');
+        fetchAnimals('', '', '', '', '');
     };
 
     return (
@@ -64,6 +66,11 @@ function AdopterDashboard() {
                         <option value="">All Species</option>
                         <option value="CAT">Cat</option>
                         <option value="DOG">Dog</option>
+                    </select>
+                    <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                        <option value="">All Genders</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
                     </select>
                     <input
                         type="number"

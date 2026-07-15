@@ -4,7 +4,8 @@ import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationRequest;
 import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationStatusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 import java.security.Principal;
 import java.util.List;
 
@@ -43,12 +44,16 @@ public class AdoptionApplicationController {
     }
 
     // Admin - view all applications (with optional status/keyword filter)
-    @GetMapping("/admin/all")
-    public ResponseEntity<List<AdoptionApplication>> getAllApplications(
+    // Admin - view all applications (with optional status/keyword/date filter)
+@GetMapping("/admin/all")
+public ResponseEntity<List<AdoptionApplication>> getAllApplications(
         @RequestParam(required = false) String status,
-        @RequestParam(required = false) String keyword) {
-    if ((status != null && !status.isEmpty()) || (keyword != null && !keyword.isEmpty())) {
-        return ResponseEntity.ok(applicationService.filterApplications(status, keyword));
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
+    if ((status != null && !status.isEmpty()) || (keyword != null && !keyword.isEmpty())
+            || dateFrom != null || dateTo != null) {
+        return ResponseEntity.ok(applicationService.filterApplications(status, keyword, dateFrom, dateTo));
     }
     return ResponseEntity.ok(applicationService.getAllApplications());
 }

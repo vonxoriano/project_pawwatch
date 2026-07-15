@@ -14,6 +14,11 @@ public class AnimalSpecification {
                 species == null || species.isEmpty() ? null : cb.equal(root.get("species"), species);
     }
 
+    public static Specification<Animal> hasGender(String gender) {
+        return (root, query, cb) ->
+                gender == null || gender.isEmpty() ? null : cb.equal(root.get("gender"), gender);
+    }
+
     public static Specification<Animal> minAge(Integer minAge) {
         return (root, query, cb) ->
                 minAge == null ? null : cb.greaterThanOrEqualTo(root.get("age"), minAge);
