@@ -19,7 +19,10 @@ function Navbar() {
                 <h1>PawWatch</h1>
             </div>
             <div className="nav-right">
-                <span className="nav-user">
+                <span
+                    className="nav-user"
+                    onClick={() => navigate('/profile')}
+                    style={{ cursor: 'pointer' }}>
                     {role === 'ADMIN' ? 'Admin: ' : ''}<strong>{fullName}</strong>
                 </span>
                 <button onClick={handleLogout}>Log Out</button>

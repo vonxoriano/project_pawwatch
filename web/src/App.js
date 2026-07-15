@@ -6,6 +6,7 @@ import AdminDashboard from './features/admin/AdminDashboard';
 import AdopterDashboard from './features/animal/AdopterDashboard';
 import AnimalDetail from './features/animal/AnimalDetail';
 import MyApplications from './features/application/MyApplications';
+import Profile from './features/auth/Profile';
 console.log('MyApplications import:', MyApplications);
 
 const PrivateRoute = ({ children }) => {
@@ -47,6 +48,11 @@ function App() {
                 <Route path="/my-applications" element={
                     <PrivateRoute>
                         <MyApplications />
+                    </PrivateRoute>
+                } />
+                <Route path="/profile" element={
+                    <PrivateRoute>
+                        <Profile />
                     </PrivateRoute>
                 } />
             </Routes>
