@@ -1,6 +1,7 @@
 package edu.cit.soriano.pawwatch.feature.animal;
 
 import edu.cit.soriano.pawwatch.feature.animal.dto.AnimalRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,6 +64,16 @@ public class AnimalService {
 
     public List<Animal> filterBySpecies(String species) {
         return animalRepository.findBySpeciesAndAdoptionStatus(species, "AVAILABLE");
+    }
+
+    public List<Animal> filterAvailableAnimals(String species, Integer minAge, Integer maxAge) {
+        Specification<Animal> spec = Specification
+                .where(AnimalSpecification.hasAdoptionStatus("AVAILABLE"))
+                .and(AnimalSpecification.hasSpecies(species))
+                .and(AnimalSpecification.minAge(minAge))
+                .and(AnimalSpecification.maxAge(maxAge));
+
+        return animalRepository.findAll(spec);
     }
 
     public Animal getAnimalById(Long id) {

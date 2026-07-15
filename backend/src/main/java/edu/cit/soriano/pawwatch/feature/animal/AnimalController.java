@@ -21,10 +21,15 @@ public class AnimalController {
     @GetMapping("/browse")
     public ResponseEntity<List<Animal>> browse(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String species) {
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge) {
 
         if (keyword != null && !keyword.isEmpty()) {
             return ResponseEntity.ok(animalService.searchAnimals(keyword));
+        }
+        if (minAge != null || maxAge != null) {
+            return ResponseEntity.ok(animalService.filterAvailableAnimals(species, minAge, maxAge));
         }
         if (species != null && !species.isEmpty()) {
             return ResponseEntity.ok(animalService.filterBySpecies(species));

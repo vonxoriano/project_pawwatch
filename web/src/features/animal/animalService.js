@@ -8,10 +8,12 @@ const headers = () => ({
     Authorization: `Bearer ${getToken()}`
 });
 
-const browseAnimals = (keyword, species) => {
+const browseAnimals = (keyword, species, minAge, maxAge) => {
     const params = {};
     if (keyword) params.keyword = keyword;
     if (species) params.species = species;
+    if (minAge) params.minAge = minAge;
+    if (maxAge) params.maxAge = maxAge;
     return axios.get(`${API_URL}/browse`, { params });
 };
 

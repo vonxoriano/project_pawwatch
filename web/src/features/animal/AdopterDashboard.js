@@ -10,15 +10,17 @@ function AdopterDashboard() {
     const [animals, setAnimals] = useState([]);
     const [keyword, setKeyword] = useState('');
     const [species, setSpecies] = useState('');
+    const [minAge, setMinAge] = useState('');
+    const [maxAge, setMaxAge] = useState('');
     const [error, setError] = useState('');
 
     useEffect(() => {
         fetchAnimals();
     }, []);
 
-    const fetchAnimals = async (kw = '', sp = '') => {
+    const fetchAnimals = async (kw = '', sp = '', minA = '', maxA = '') => {
         try {
-            const res = await animalService.browseAnimals(kw, sp);
+            const res = await animalService.browseAnimals(kw, sp, minA, maxA);
             setAnimals(res.data);
         } catch (err) {
             setError('Failed to load animals.');
@@ -27,13 +29,15 @@ function AdopterDashboard() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchAnimals(keyword, species);
+        fetchAnimals(keyword, species, minAge, maxAge);
     };
 
     const handleReset = () => {
         setKeyword('');
         setSpecies('');
-        fetchAnimals('', '');
+        setMinAge('');
+        setMaxAge('');
+        fetchAnimals('', '', '', '');
     };
 
     return (
@@ -61,6 +65,22 @@ function AdopterDashboard() {
                         <option value="CAT">Cat</option>
                         <option value="DOG">Dog</option>
                     </select>
+                    <input
+                        type="number"
+                        min="0"
+                        placeholder="Min age"
+                        value={minAge}
+                        onChange={(e) => setMinAge(e.target.value)}
+                        style={{ width: '90px' }}
+                    />
+                    <input
+                        type="number"
+                        min="0"
+                        placeholder="Max age"
+                        value={maxAge}
+                        onChange={(e) => setMaxAge(e.target.value)}
+                        style={{ width: '90px' }}
+                    />
                     <button type="submit" className="btn-primary"
                         style={{ width: 'auto', padding: '10px 24px' }}>
                         Search
