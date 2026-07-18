@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://project-pawwatch.onrender.com';
+const API_URL = `${process.env.REACT_APP_API_URL}/api/auth`;
 
 const register = (fullName, email, contactNumber, password) => {
     return axios.post(`${API_URL}/register`, {

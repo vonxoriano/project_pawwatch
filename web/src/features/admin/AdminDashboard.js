@@ -87,7 +87,8 @@ function AdminDashboard() {
                 alert('Animal removed successfully!');
                 fetchAnimals();
             } catch (err) {
-                alert('Failed to remove animal.');
+                const message = err.response?.data || 'Failed to remove animal.';
+                alert(message);
             }
         }
     };

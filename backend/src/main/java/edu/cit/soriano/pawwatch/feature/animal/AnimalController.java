@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/animals")
-@CrossOrigin(origins = "http://localhost:3000")
 public class AnimalController {
 
     private final AnimalService animalService;
@@ -19,24 +18,24 @@ public class AnimalController {
 
     // Public - Adopters browse available animals
     @GetMapping("/browse")
-public ResponseEntity<List<Animal>> browse(
-        @RequestParam(required = false) String keyword,
-        @RequestParam(required = false) String species,
-        @RequestParam(required = false) String gender,
-        @RequestParam(required = false) Integer minAge,
-        @RequestParam(required = false) Integer maxAge) {
+    public ResponseEntity<List<Animal>> browse(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge) {
 
-    if (keyword != null && !keyword.isEmpty()) {
-        return ResponseEntity.ok(animalService.searchAnimals(keyword));
+        if (keyword != null && !keyword.isEmpty()) {
+            return ResponseEntity.ok(animalService.searchAnimals(keyword));
+        }
+        if (gender != null || minAge != null || maxAge != null) {
+            return ResponseEntity.ok(animalService.filterAvailableAnimals(species, gender, minAge, maxAge));
+        }
+        if (species != null && !species.isEmpty()) {
+            return ResponseEntity.ok(animalService.filterBySpecies(species));
+        }
+        return ResponseEntity.ok(animalService.getAvailableAnimals());
     }
-    if (gender != null || minAge != null || maxAge != null) {
-        return ResponseEntity.ok(animalService.filterAvailableAnimals(species, gender, minAge, maxAge));
-    }
-    if (species != null && !species.isEmpty()) {
-        return ResponseEntity.ok(animalService.filterBySpecies(species));
-    }
-    return ResponseEntity.ok(animalService.getAvailableAnimals());
-}
 
     // Public - View single animal
     @GetMapping("/{id}")
@@ -63,7 +62,11 @@ public ResponseEntity<List<Animal>> browse(
 
     @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        animalService.removeAnimal(id);
-        return ResponseEntity.ok("Animal removed successfully");
+        try {
+            animalService.removeAnimal(id);
+            return ResponseEntity.ok("Animal removed successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
+        }
     }
 }

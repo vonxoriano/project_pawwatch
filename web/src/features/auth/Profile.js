@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/users';
+const API_URL = `${process.env.REACT_APP_API_URL}/api/users`;
 
 function Profile() {
     const navigate = useNavigate();

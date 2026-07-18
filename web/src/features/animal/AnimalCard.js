@@ -22,7 +22,7 @@ function AnimalCard({ animal, onFavoriteChange }) {
 
     const handleToggleFavorite = async (e) => {
         e.stopPropagation(); // don't trigger the card's navigate
-        if (togglingRef.current) return; // synchronous guard, immune to state batching
+        if (togglingRef.current) return;
         togglingRef.current = true;
         setLoading(true);
 
@@ -38,7 +38,6 @@ function AnimalCard({ animal, onFavoriteChange }) {
             if (onFavoriteChange) onFavoriteChange(animal.animalId, !wasFavorite);
         } catch (err) {
             console.error('Favorite toggle failed:', err);
-            // Re-sync with backend truth in case of a stale/conflicting state
             try {
                 const actual = await favoriteService.checkFavorite(animal.animalId);
                 setIsFavorite(actual);
@@ -58,20 +57,30 @@ function AnimalCard({ animal, onFavoriteChange }) {
                     ? <img src={animal.photo} alt={animal.name} />
                     : (animal.species === 'CAT' ? '🐱' : '🐶')
                 }
-                <button
-                    className="favorite-toggle-btn"
-                    onClick={handleToggleFavorite}
-                    disabled={loading}
-                    aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                >
-                    {isFavorite ? '❤️' : '🤍'}
-                </button>
             </div>
             <div className="animal-card-body">
                 <h3>{animal.name}</h3>
                 <p>{animal.breed} · {animal.age} yrs · {animal.gender}</p>
                 <div className="animal-card-footer">
-                    <span className="status-badge status-available">AVAILABLE</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button
+                            className="favorite-toggle-btn"
+                            onClick={handleToggleFavorite}
+                            disabled={loading}
+                            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                padding: '0',
+                                lineHeight: 1
+                            }}
+                        >
+                            {isFavorite ? '❤️' : '🤍'}
+                        </button>
+                        <span className="status-badge status-available">AVAILABLE</span>
+                    </div>
                     <span style={{ fontSize: '12px', color: '#FF6B2C', fontWeight: 600 }}>
                         View Profile →
                     </span>

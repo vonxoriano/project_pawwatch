@@ -1,6 +1,8 @@
 package edu.cit.soriano.pawwatch.feature.animal;
 
 import edu.cit.soriano.pawwatch.feature.animal.dto.AnimalRequest;
+import edu.cit.soriano.pawwatch.feature.favorite.FavoriteRepository;
+import edu.cit.soriano.pawwatch.feature.application.AdoptionApplicationRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,15 @@ import java.util.List;
 public class AnimalService {
 
     private final AnimalRepository animalRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final AdoptionApplicationRepository applicationRepository;
 
-    public AnimalService(AnimalRepository animalRepository) {
+    public AnimalService(AnimalRepository animalRepository,
+                          FavoriteRepository favoriteRepository,
+                          AdoptionApplicationRepository applicationRepository) {
         this.animalRepository = animalRepository;
+        this.favoriteRepository = favoriteRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     public Animal addAnimal(AnimalRequest request) {
@@ -46,6 +54,14 @@ public class AnimalService {
     public void removeAnimal(Long id) {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal not found"));
+
+        if (!applicationRepository.findByAnimal(animal).isEmpty()) {
+            throw new RuntimeException(
+                    "Cannot remove this animal: it has adoption application history. " +
+                    "Remove is only allowed for animals with no submitted applications.");
+        }
+
+        favoriteRepository.deleteByAnimal(animal);
         animalRepository.delete(animal);
     }
 
@@ -67,25 +83,25 @@ public class AnimalService {
     }
 
     public List<Animal> filterAvailableAnimals(String species, Integer minAge, Integer maxAge) {
-        Specification<Animal> spec = Specification
-                .where(AnimalSpecification.hasAdoptionStatus("AVAILABLE"))
-                .and(AnimalSpecification.hasSpecies(species))
-                .and(AnimalSpecification.minAge(minAge))
-                .and(AnimalSpecification.maxAge(maxAge));
+        Specification<Animal> spec = Specification.allOf(
+                AnimalSpecification.hasAdoptionStatus("AVAILABLE"),
+                AnimalSpecification.hasSpecies(species),
+                AnimalSpecification.minAge(minAge),
+                AnimalSpecification.maxAge(maxAge));
 
         return animalRepository.findAll(spec);
     }
 
     public List<Animal> filterAvailableAnimals(String species, String gender, Integer minAge, Integer maxAge) {
-    Specification<Animal> spec = Specification
-            .where(AnimalSpecification.hasAdoptionStatus("AVAILABLE"))
-            .and(AnimalSpecification.hasSpecies(species))
-            .and(AnimalSpecification.hasGender(gender))
-            .and(AnimalSpecification.minAge(minAge))
-            .and(AnimalSpecification.maxAge(maxAge));
+        Specification<Animal> spec = Specification.allOf(
+                AnimalSpecification.hasAdoptionStatus("AVAILABLE"),
+                AnimalSpecification.hasSpecies(species),
+                AnimalSpecification.hasGender(gender),
+                AnimalSpecification.minAge(minAge),
+                AnimalSpecification.maxAge(maxAge));
 
-    return animalRepository.findAll(spec);
-}
+        return animalRepository.findAll(spec);
+    }
 
     public Animal getAnimalById(Long id) {
         return animalRepository.findById(id)
