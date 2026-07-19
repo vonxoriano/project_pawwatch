@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 fun AnimalBrowseScreen(
     onAnimalClick: (Long) -> Unit,
     onMyApplicationsClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onLogout: () -> Unit
 ) {
     val context = LocalContext.current
@@ -62,7 +63,7 @@ fun AnimalBrowseScreen(
             .fillMaxSize()
             .background(PawWatchColors.Background)
     ) {
-        TopBar(onLogout = onLogout)
+        TopBar(onProfileClick = onProfileClick, onLogout = onLogout)
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row(

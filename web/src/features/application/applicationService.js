@@ -8,9 +8,9 @@ const headers = () => ({
     Authorization: `Bearer ${getToken()}`
 });
 
-const submitApplication = (animalId) => {
+const submitApplication = (applicationData) => {
     return axios.post(`${API_URL}/submit`,
-        { animalId },
+        applicationData,
         { headers: headers() }
     );
 };

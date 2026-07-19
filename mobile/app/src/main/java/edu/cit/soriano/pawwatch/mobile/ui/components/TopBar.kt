@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 
 @Composable
-fun TopBar(userLabel: String? = null, onLogout: () -> Unit) {
+fun TopBar(userLabel: String? = null, onProfileClick: (() -> Unit)? = null, onLogout: () -> Unit) {
     Surface(color = Color.White, shadowElevation = 2.dp) {
         Row(
             modifier = Modifier
@@ -33,6 +33,18 @@ fun TopBar(userLabel: String? = null, onLogout: () -> Unit) {
                 userLabel?.let {
                     Text(it, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = PawWatchColors.TextDark)
                     Spacer(modifier = Modifier.width(12.dp))
+                }
+                onProfileClick?.let { onClick ->
+                    OutlinedButton(
+                        onClick = onClick,
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary),
+                        border = BorderStroke(1.dp, PawWatchColors.Primary),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                    ) {
+                        Text("Profile", fontSize = 13.sp)
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
                 OutlinedButton(
                     onClick = onLogout,

@@ -16,28 +16,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.cit.soriano.pawwatch.mobile.model.ApplicationRequest
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
 import edu.cit.soriano.pawwatch.mobile.ui.components.StatusBadge
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalDetailScreen(
     animalId: Long,
     onBack: () -> Unit,
-    onApplicationSubmitted: () -> Unit
+    onApplyClick: (Long) -> Unit
 ) {
     val context = LocalContext.current
     val sessionManager = remember { SessionManager(context) }
-    val scope = rememberCoroutineScope()
     var animal by remember { mutableStateOf<edu.cit.soriano.pawwatch.mobile.model.Animal?>(null) }
     var loading by remember { mutableStateOf(true) }
-    var applying by remember { mutableStateOf(false) }
     val role = sessionManager.getRole()
-    val token = "Bearer ${sessionManager.getToken()}"
 
     LaunchedEffect(animalId) {
         try {
@@ -120,37 +115,11 @@ fun AnimalDetailScreen(
                 if (role == "ADOPTER" && animal!!.adoptionStatus == "AVAILABLE") {
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
-                        onClick = {
-                            applying = true
-                            scope.launch {
-                                try {
-                                    val response = RetrofitClient.apiService.submitApplication(
-                                        token = token,
-                                        request = ApplicationRequest(animal!!.animalId)
-                                    )
-                                    if (response.isSuccessful) {
-                                        Toast.makeText(context,
-                                            "Application submitted successfully!",
-                                            Toast.LENGTH_LONG).show()
-                                        onApplicationSubmitted()
-                                    } else {
-                                        Toast.makeText(context,
-                                            "Failed to submit application.",
-                                            Toast.LENGTH_SHORT).show()
-                                    }
-                                } catch (e: Exception) {
-                                    Toast.makeText(context, "Error: ${e.message}",
-                                        Toast.LENGTH_SHORT).show()
-                                } finally {
-                                    applying = false
-                                }
-                            }
-                        },
-                        enabled = !applying,
+                        onClick = { onApplyClick(animal!!.animalId) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6B2C))
                     ) {
-                        Text(if (applying) "Submitting..." else "🐾 Adopt Me", fontSize = 16.sp)
+                        Text("🐾 Adopt Me", fontSize = 16.sp)
                     }
                 }
             }

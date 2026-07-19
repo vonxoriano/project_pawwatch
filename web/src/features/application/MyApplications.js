@@ -7,6 +7,7 @@ function MyApplications() {
     const navigate = useNavigate();
     const [applications, setApplications] = useState([]);
     const [error, setError] = useState('');
+    const [expanded, setExpanded] = useState({});
 
     useEffect(() => {
         fetchApplications();
@@ -39,6 +40,12 @@ function MyApplications() {
         return 'status-badge status-adopted';
     };
 
+    const toggleExpanded = (id) => {
+        setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const yesNo = (value) => (value === true ? 'Yes' : value === false ? 'No' : '—');
+
     return (
         <div className="dashboard-container">
             <Navbar />
@@ -66,31 +73,60 @@ function MyApplications() {
                                 <th>Date Applied</th>
                                 <th>Status</th>
                                 <th>Remarks</th>
+                                <th>Questionnaire</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {applications.map(app => (
-                                <tr key={app.applicationId}>
-                                    <td>{app.animal.name}</td>
-                                    <td>{app.animal.species}</td>
-                                    <td>{new Date(app.applicationDate).toLocaleDateString()}</td>
-                                    <td>
-                                        <span className={getStatusClass(app.status)}>
-                                            {app.status}
-                                        </span>
-                                    </td>
-                                    <td>{app.remarks || '—'}</td>
-                                    <td>
-                                        {app.status === 'PENDING' && (
+                                <React.Fragment key={app.applicationId}>
+                                    <tr>
+                                        <td>{app.animal.name}</td>
+                                        <td>{app.animal.species}</td>
+                                        <td>{new Date(app.applicationDate).toLocaleDateString()}</td>
+                                        <td>
+                                            <span className={getStatusClass(app.status)}>
+                                                {app.status}
+                                            </span>
+                                        </td>
+                                        <td>{app.remarks || '—'}</td>
+                                        <td>
                                             <button
-                                                className="btn-delete"
-                                                onClick={() => handleCancel(app.applicationId)}>
-                                                Cancel
+                                                className="btn-secondary"
+                                                style={{ padding: '6px 12px', fontSize: '12px' }}
+                                                onClick={() => toggleExpanded(app.applicationId)}>
+                                                {expanded[app.applicationId] ? 'Hide' : 'View'}
                                             </button>
-                                        )}
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+                                            {app.status === 'PENDING' && (
+                                                <button
+                                                    className="btn-delete"
+                                                    onClick={() => handleCancel(app.applicationId)}>
+                                                    Cancel
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                    {expanded[app.applicationId] && (
+                                        <tr>
+                                            <td colSpan={7} style={{ background: '#fafafa', padding: '16px' }}>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 24px', fontSize: '13px' }}>
+                                                    <div><strong>Housing type:</strong> {app.housingType || '—'}</div>
+                                                    <div><strong>Landlord permission:</strong> {yesNo(app.hasLandlordPermission)}</div>
+                                                    <div><strong>Has yard:</strong> {yesNo(app.hasYard)}</div>
+                                                    <div><strong>Household members:</strong> {app.householdMembers ?? '—'}</div>
+                                                    <div><strong>Young children at home:</strong> {yesNo(app.hasYoungChildren)}</div>
+                                                    <div><strong>Has other pets:</strong> {yesNo(app.hasOtherPets)}</div>
+                                                    <div><strong>Hours away daily:</strong> {app.hoursAwayDaily ?? '—'}</div>
+                                                    <div><strong>Agrees to return policy:</strong> {yesNo(app.agreesToReturnPolicy)}</div>
+                                                    <div style={{ gridColumn: '1 / -1' }}><strong>Pet experience:</strong> {app.petExperience || '—'}</div>
+                                                    <div style={{ gridColumn: '1 / -1' }}><strong>Reason for adopting:</strong> {app.reasonForAdopting || '—'}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
                             ))}
                         </tbody>
                     </table>

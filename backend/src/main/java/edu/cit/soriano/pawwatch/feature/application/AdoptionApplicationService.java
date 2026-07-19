@@ -45,16 +45,56 @@ public class AdoptionApplicationService {
             throw new RuntimeException("You already have a pending application for this animal");
         }
 
+        validateQuestionnaire(request);
+
         AdoptionApplication application = new AdoptionApplication();
         application.setUser(user);
         application.setAnimal(animal);
         application.setStatus("PENDING");
         application.setRemarks(request.getRemarks());
 
+        application.setHousingType(request.getHousingType());
+        application.setHasLandlordPermission(request.getHasLandlordPermission());
+        application.setHasYard(request.getHasYard());
+        application.setHouseholdMembers(request.getHouseholdMembers());
+        application.setHasYoungChildren(request.getHasYoungChildren());
+        application.setHasOtherPets(request.getHasOtherPets());
+        application.setPetExperience(request.getPetExperience());
+        application.setHoursAwayDaily(request.getHoursAwayDaily());
+        application.setReasonForAdopting(request.getReasonForAdopting());
+        application.setAgreesToReturnPolicy(request.getAgreesToReturnPolicy());
+
         animal.setAdoptionStatus("PENDING");
         animalRepository.save(animal);
 
         return applicationRepository.save(application);
+    }
+
+    private void validateQuestionnaire(ApplicationRequest request) {
+        List<String> missing = new java.util.ArrayList<>();
+
+        if (request.getHousingType() == null || request.getHousingType().isBlank()) {
+            missing.add("housingType");
+        } else if (!request.getHousingType().equals("OWN") && !request.getHousingType().equals("RENT")) {
+            throw new RuntimeException("housingType must be either 'OWN' or 'RENT'");
+        } else if (request.getHousingType().equals("RENT") && request.getHasLandlordPermission() == null) {
+            missing.add("hasLandlordPermission (required when renting)");
+        }
+
+        if (request.getHasYard() == null) missing.add("hasYard");
+        if (request.getHouseholdMembers() == null) missing.add("householdMembers");
+        if (request.getHasYoungChildren() == null) missing.add("hasYoungChildren");
+        if (request.getHasOtherPets() == null) missing.add("hasOtherPets");
+        if (request.getPetExperience() == null || request.getPetExperience().isBlank()) missing.add("petExperience");
+        if (request.getHoursAwayDaily() == null) missing.add("hoursAwayDaily");
+        if (request.getReasonForAdopting() == null || request.getReasonForAdopting().isBlank()) missing.add("reasonForAdopting");
+        if (request.getAgreesToReturnPolicy() == null || !request.getAgreesToReturnPolicy()) {
+            missing.add("agreesToReturnPolicy (must be accepted)");
+        }
+
+        if (!missing.isEmpty()) {
+            throw new RuntimeException("Missing or invalid required fields: " + String.join(", ", missing));
+        }
     }
 
     public List<AdoptionApplication> getMyApplications(String email) {
@@ -68,14 +108,14 @@ public class AdoptionApplicationService {
     }
 
     public List<AdoptionApplication> filterApplications(String status, String keyword, LocalDate dateFrom, LocalDate dateTo) {
-    Specification<AdoptionApplication> spec = Specification
-            .where(hasStatus(status))
-            .and(keywordMatches(keyword))
-            .and(dateFrom(dateFrom))
-            .and(dateTo(dateTo));
+        Specification<AdoptionApplication> spec = Specification.allOf(
+                hasStatus(status),
+                keywordMatches(keyword),
+                dateFrom(dateFrom),
+                dateTo(dateTo));
 
-    return applicationRepository.findAll(spec);
-}
+        return applicationRepository.findAll(spec);
+    }
     public AdoptionApplication processApplication(Long applicationId, ApplicationStatusRequest request) {
         AdoptionApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));

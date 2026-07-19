@@ -8,7 +8,8 @@ function Register() {
     fullName: '',
     email: '',
     contactNumber: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -22,6 +23,12 @@ function Register() {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -97,6 +104,17 @@ function Register() {
               name="password"
               placeholder="Create a password"
               value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Re-enter your password"
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />

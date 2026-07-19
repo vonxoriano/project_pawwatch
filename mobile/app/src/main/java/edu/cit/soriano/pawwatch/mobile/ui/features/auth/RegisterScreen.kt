@@ -27,6 +27,7 @@ fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var contactNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
 
     Column(
@@ -73,12 +74,26 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("Confirm Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = {
-                if (fullName.isBlank() || email.isBlank() || contactNumber.isBlank() || password.isBlank()) {
+                if (fullName.isBlank() || email.isBlank() || contactNumber.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                     Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (password != confirmPassword) {
+                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 loading = true

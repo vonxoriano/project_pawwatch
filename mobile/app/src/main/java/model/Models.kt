@@ -30,7 +30,17 @@ data class AdoptionApplication(
     val user: ApplicationUser?,
     val applicationDate: String,
     val status: String,
-    val remarks: String?
+    val remarks: String?,
+    val housingType: String? = null,
+    val hasLandlordPermission: Boolean? = null,
+    val hasYard: Boolean? = null,
+    val householdMembers: Int? = null,
+    val hasYoungChildren: Boolean? = null,
+    val hasOtherPets: Boolean? = null,
+    val petExperience: String? = null,
+    val hoursAwayDaily: Int? = null,
+    val reasonForAdopting: String? = null,
+    val agreesToReturnPolicy: Boolean? = null
 )
 
 data class ApplicationUser(
@@ -42,7 +52,18 @@ data class ApplicationUser(
 )
 
 data class ApplicationRequest(
-    val animalId: Long
+    val animalId: Long,
+    val housingType: String,
+    val hasLandlordPermission: Boolean?,
+    val hasYard: Boolean,
+    val householdMembers: Int,
+    val hasYoungChildren: Boolean,
+    val hasOtherPets: Boolean,
+    val petExperience: String,
+    val hoursAwayDaily: Int,
+    val reasonForAdopting: String,
+    val agreesToReturnPolicy: Boolean,
+    val remarks: String? = null
 )
 
 data class ApplicationStatusRequest(

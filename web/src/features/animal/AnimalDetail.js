@@ -3,12 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import animalService from './animalService';
 import applicationService from '../application/applicationService';
+import ApplicationModal from '../application/ApplicationModal';
 function AnimalDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [animal, setAnimal] = useState(null);
     const [error, setError] = useState('');
-    const [applying, setApplying] = useState(false);
+    const [showApplyModal, setShowApplyModal] = useState(false);
     const role = localStorage.getItem('role');
 
     useEffect(() => {
@@ -23,24 +24,11 @@ function AnimalDetail() {
         fetchAnimal();
     }, [id]);
 
-    const handleApply = async () => {
-    console.log('Apply clicked');
-    console.log('Animal ID:', animal.animalId);
-    console.log('Token:', localStorage.getItem('token'));
-    setApplying(true);
-    try {
-        const res = await applicationService.submitApplication(animal.animalId);
-        console.log('Response:', res);
+    const handleSubmitApplication = async (applicationData) => {
+        await applicationService.submitApplication(applicationData);
         alert('Application submitted successfully! You can track it in My Applications.');
         navigate('/my-applications');
-    } catch (err) {
-        console.log('Error:', err);
-        console.log('Error response:', err.response);
-        alert(err.response?.data?.message || err.response?.data || 'Failed to submit application.');
-    } finally {
-        setApplying(false);
-    }
-};
+    };
 
     if (error) {
         return (
@@ -102,15 +90,21 @@ function AnimalDetail() {
                                 <button
                                     className="btn-primary"
                                     style={{ width: 'auto', padding: '10px 28px' }}
-                                    onClick={handleApply}
-                                    disabled={applying}>
-                                    {applying ? 'Submitting...' : '🐾 Adopt Me'}
+                                    onClick={() => setShowApplyModal(true)}>
+                                    🐾 Adopt Me
                                 </button>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
+            {showApplyModal && (
+                <ApplicationModal
+                    animal={animal}
+                    onSubmit={handleSubmitApplication}
+                    onClose={() => setShowApplyModal(false)}
+                />
+            )}
         </div>
     );
 }

@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
-
 public class AdoptionApplicationController {
 
     private final AdoptionApplicationService applicationService;
@@ -22,12 +21,16 @@ public class AdoptionApplicationController {
 
     // Adopter - submit application
     @PostMapping("/submit")
-    public ResponseEntity<AdoptionApplication> submit(
+    public ResponseEntity<?> submit(
             @RequestBody ApplicationRequest request,
             Principal principal) {
-        AdoptionApplication application = applicationService
-                .submitApplication(principal.getName(), request);
-        return ResponseEntity.ok(application);
+        try {
+            AdoptionApplication application = applicationService
+                    .submitApplication(principal.getName(), request);
+            return ResponseEntity.ok(application);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Adopter - view my applications

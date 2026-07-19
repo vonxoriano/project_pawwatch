@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 
 // Admin feature slice - handles animal management and application processing
 @Composable
-fun AdminDashboardScreen(onLogout: () -> Unit) {
+fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
     val context = LocalContext.current
     val sessionManager = remember { SessionManager(context) }
     val scope = rememberCoroutineScope()
@@ -77,7 +77,7 @@ fun AdminDashboardScreen(onLogout: () -> Unit) {
             .fillMaxSize()
             .background(PawWatchColors.Background)
     ) {
-        TopBar(userLabel = "Admin: Admin", onLogout = onLogout)
+        TopBar(userLabel = "Admin: Admin", onProfileClick = onProfileClick, onLogout = onLogout)
 
         TabRow(
             selectedTabIndex = selectedTab,

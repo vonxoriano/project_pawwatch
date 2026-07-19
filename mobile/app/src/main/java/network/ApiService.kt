@@ -13,6 +13,24 @@ interface ApiService {
     @POST("api/auth/login")
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
+    // Profile
+    @GET("api/users/me")
+    suspend fun getProfile(
+        @Header("Authorization") token: String
+    ): Response<UserProfile>
+
+    @PUT("api/users/me")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Body request: UpdateProfileRequest
+    ): Response<UserProfile>
+
+    @PUT("api/users/me/password")
+    suspend fun changePassword(
+        @Header("Authorization") token: String,
+        @Body request: ChangePasswordRequest
+    ): Response<String>
+
     // Animals - Adopter
     @GET("api/animals/browse")
     suspend fun browseAnimals(

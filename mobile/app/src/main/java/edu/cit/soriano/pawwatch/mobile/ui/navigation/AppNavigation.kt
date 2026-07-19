@@ -11,8 +11,10 @@ import edu.cit.soriano.pawwatch.mobile.ui.features.admin.AdminDashboardScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.application.MyApplicationsScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalBrowseScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalDetailScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.application.ApplyApplicationScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.LoginScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.RegisterScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.profile.ProfileScreen
 
 object Routes {
     const val LOGIN = "login"
@@ -21,8 +23,11 @@ object Routes {
     const val ADMIN_DASHBOARD = "admin_dashboard"
     const val ANIMAL_DETAIL = "animal_detail/{animalId}"
     const val MY_APPLICATIONS = "my_applications"
+    const val PROFILE = "profile"
+    const val APPLY_APPLICATION = "apply_application/{animalId}"
 
     fun animalDetail(animalId: Long) = "animal_detail/$animalId"
+    fun applyApplication(animalId: Long) = "apply_application/$animalId"
 }
 
 @Composable
@@ -71,6 +76,9 @@ fun AppNavigation() {
                 onMyApplicationsClick = {
                     navController.navigate(Routes.MY_APPLICATIONS)
                 },
+                onProfileClick = {
+                    navController.navigate(Routes.PROFILE)
+                },
                 onLogout = {
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.ADOPTER_DASHBOARD) { inclusive = true }
@@ -87,8 +95,24 @@ fun AppNavigation() {
             AnimalDetailScreen(
                 animalId = animalId,
                 onBack = { navController.popBackStack() },
-                onApplicationSubmitted = {
-                    navController.navigate(Routes.MY_APPLICATIONS)
+                onApplyClick = { id ->
+                    navController.navigate(Routes.applyApplication(id))
+                }
+            )
+        }
+
+        composable(
+            route = Routes.APPLY_APPLICATION,
+            arguments = listOf(navArgument("animalId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val animalId = backStackEntry.arguments?.getLong("animalId") ?: return@composable
+            ApplyApplicationScreen(
+                animalId = animalId,
+                onBack = { navController.popBackStack() },
+                onSubmitted = {
+                    navController.navigate(Routes.MY_APPLICATIONS) {
+                        popUpTo(Routes.ADOPTER_DASHBOARD)
+                    }
                 }
             )
         }
@@ -101,11 +125,20 @@ fun AppNavigation() {
 
         composable(Routes.ADMIN_DASHBOARD) {
             AdminDashboardScreen(
+                onProfileClick = {
+                    navController.navigate(Routes.PROFILE)
+                },
                 onLogout = {
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.ADMIN_DASHBOARD) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable(Routes.PROFILE) {
+            ProfileScreen(
+                onBack = { navController.popBackStack() }
             )
         }
     }

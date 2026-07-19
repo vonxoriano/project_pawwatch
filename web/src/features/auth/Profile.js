@@ -19,6 +19,15 @@ function Profile() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: ''
+    });
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
+    const [changingPassword, setChangingPassword] = useState(false);
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -64,6 +73,34 @@ function Profile() {
     const handleBack = () => {
         if (role === 'ADMIN') navigate('/admin');
         else navigate('/dashboard');
+    };
+
+    const handlePasswordChange = (e) => {
+        setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+    };
+
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        setPasswordError('');
+        setPasswordSuccess('');
+
+        if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+            setPasswordError('New passwords do not match.');
+            return;
+        }
+
+        setChangingPassword(true);
+        try {
+            const res = await axios.put(`${API_URL}/me/password`, passwordData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setPasswordSuccess(res.data || 'Password changed successfully!');
+            setPasswordData({ currentPassword: '', newPassword: '', confirmNewPassword: '' });
+        } catch (err) {
+            setPasswordError(err.response?.data || 'Failed to change password.');
+        } finally {
+            setChangingPassword(false);
+        }
     };
 
     if (loading) return (
@@ -129,6 +166,53 @@ function Profile() {
                                 className="btn-primary"
                                 disabled={saving}>
                                 {saving ? 'Saving...' : 'Save Changes'}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="auth-card" style={{ marginTop: '16px' }}>
+                        <h2 style={{ fontSize: '18px' }}>Change Password</h2>
+                        <hr className="auth-divider" />
+
+                        {passwordError && <div className="error-message">⚠️ {passwordError}</div>}
+                        {passwordSuccess && <div className="success-message">✅ {passwordSuccess}</div>}
+
+                        <form onSubmit={handlePasswordSubmit}>
+                            <div className="form-group">
+                                <label>Current Password</label>
+                                <input
+                                    type="password"
+                                    name="currentPassword"
+                                    value={passwordData.currentPassword}
+                                    onChange={handlePasswordChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>New Password</label>
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    value={passwordData.newPassword}
+                                    onChange={handlePasswordChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    name="confirmNewPassword"
+                                    value={passwordData.confirmNewPassword}
+                                    onChange={handlePasswordChange}
+                                    required
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="btn-primary"
+                                disabled={changingPassword}>
+                                {changingPassword ? 'Changing...' : 'Change Password'}
                             </button>
                         </form>
                     </div>
