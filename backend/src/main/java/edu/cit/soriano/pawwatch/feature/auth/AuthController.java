@@ -5,7 +5,6 @@ import edu.cit.soriano.pawwatch.feature.auth.dto.LoginRequest;
 import edu.cit.soriano.pawwatch.feature.auth.dto.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")

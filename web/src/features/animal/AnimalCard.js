@@ -73,7 +73,7 @@ function AnimalCard({ animal, onFavoriteChange }) {
                 <div className="animal-card-footer">
                     <span className="status-badge status-available">AVAILABLE</span>
                     <span style={{ fontSize: '12px', color: '#FF6B2C', fontWeight: 600 }}>
-                        View Profile →
+                        View
                     </span>
                 </div>
             </div>

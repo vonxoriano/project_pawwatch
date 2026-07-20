@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import FilterBar from '../../components/FilterBar';
 import AnimalCard from './AnimalCard';
 import animalService from './animalService';
 
@@ -55,47 +56,55 @@ function AdopterDashboard() {
 
                 {error && <div className="error-message">{error}</div>}
 
-                <form className="search-bar" onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Search by name or breed..."
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
-                    <select value={species} onChange={(e) => setSpecies(e.target.value)}>
-                        <option value="">All Species</option>
-                        <option value="CAT">Cat</option>
-                        <option value="DOG">Dog</option>
-                    </select>
-                    <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                        <option value="">All Genders</option>
-                        <option value="MALE">Male</option>
-                        <option value="FEMALE">Female</option>
-                    </select>
-                    <input
-                        type="number"
-                        min="0"
-                        placeholder="Min age"
-                        value={minAge}
-                        onChange={(e) => setMinAge(e.target.value)}
-                        style={{ width: '90px' }}
-                    />
-                    <input
-                        type="number"
-                        min="0"
-                        placeholder="Max age"
-                        value={maxAge}
-                        onChange={(e) => setMaxAge(e.target.value)}
-                        style={{ width: '90px' }}
-                    />
-                    <button type="submit" className="btn-primary"
-                        style={{ width: 'auto', padding: '10px 24px' }}>
-                        Search
-                    </button>
-                    <button type="button" className="btn-secondary" onClick={handleReset}>
-                        Reset
-                    </button>
-                </form>
+                <FilterBar
+                    fields={[
+                        {
+                            type: 'text',
+                            value: keyword,
+                            onChange: (e) => setKeyword(e.target.value),
+                            placeholder: 'Search by name or breed...'
+                        },
+                        {
+                            type: 'select',
+                            value: species,
+                            onChange: (e) => setSpecies(e.target.value),
+                            options: [
+                                { value: '', label: 'All Species' },
+                                { value: 'CAT', label: 'Cat' },
+                                { value: 'DOG', label: 'Dog' }
+                            ]
+                        },
+                        {
+                            type: 'select',
+                            value: gender,
+                            onChange: (e) => setGender(e.target.value),
+                            options: [
+                                { value: '', label: 'All Genders' },
+                                { value: 'MALE', label: 'Male' },
+                                { value: 'FEMALE', label: 'Female' }
+                            ]
+                        },
+                        {
+                            type: 'number',
+                            min: '0',
+                            value: minAge,
+                            onChange: (e) => setMinAge(e.target.value),
+                            placeholder: 'Min age',
+                            style: { width: '90px' }
+                        },
+                        {
+                            type: 'number',
+                            min: '0',
+                            value: maxAge,
+                            onChange: (e) => setMaxAge(e.target.value),
+                            placeholder: 'Max age',
+                            style: { width: '90px' }
+                        }
+                    ]}
+                    onFilter={handleSearch}
+                    onReset={handleReset}
+                    submitLabel="Search"
+                />
 
                 {animals.length === 0 ? (
                     <div className="empty-state">

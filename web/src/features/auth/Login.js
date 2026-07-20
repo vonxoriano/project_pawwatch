@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from './authService';
+import FormField from '../../components/FormField';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function Login() {
       localStorage.setItem('role', role);
       localStorage.setItem('fullName', response.data.fullName);
       alert(`Welcome back, ${response.data.fullName}!`);
-      
+
       if (role === 'ADMIN') {
         navigate('/admin');
       } else {
@@ -41,7 +42,7 @@ function Login() {
     } finally {
       setLoading(false);
     }
-  }; // Fixed: Kept only the one necessary brace for handleSubmit
+  };
 
   return (
     <div className="auth-container">
@@ -59,28 +60,24 @@ function Login() {
         {error && <div className="error-message">⚠️ {error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <FormField
+            label="Email Address"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <FormField
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Logging in...' : 'Log In'}
           </button>

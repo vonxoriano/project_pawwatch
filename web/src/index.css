@@ -454,6 +454,33 @@ body {
   border-color: #FF6B2C;
 }
 
+/* ===== FILTER BAR ACTION BUTTONS ===== */
+/* Used for Filter/Search + Reset button pairs so they always stay
+   visually identical — same size, same solid orange fill, everywhere. */
+.filter-btn {
+  width: auto;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #FF6B2C, #ff8c55);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(255, 107, 44, 0.3);
+}
+
+.filter-btn:hover {
+  background: linear-gradient(135deg, #e85a1f, #FF6B2C);
+  box-shadow: 0 6px 20px rgba(255, 107, 44, 0.4);
+  transform: translateY(-1px);
+}
+
+.filter-btn:active {
+  transform: translateY(0);
+}
+
 .search-bar select {
   padding: 10px 16px;
   border: 1.5px solid #ebebeb;

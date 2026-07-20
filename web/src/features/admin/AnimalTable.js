@@ -12,7 +12,7 @@ function AnimalTable({ animals, onEdit, onDelete }) {
         return (
             <div className="empty-state">
                 <div className="empty-icon">🐾</div>
-                <p>No animals listed yet. Add your first one!</p>
+                <p>No animals match your search/filter criteria.</p>
             </div>
         );
     }
@@ -21,6 +21,7 @@ function AnimalTable({ animals, onEdit, onDelete }) {
         <table className="admin-table">
             <thead>
                 <tr>
+                    <th>Photo</th>
                     <th>Name</th>
                     <th>Species</th>
                     <th>Breed</th>
@@ -33,6 +34,28 @@ function AnimalTable({ animals, onEdit, onDelete }) {
             <tbody>
                 {animals.map(animal => (
                     <tr key={animal.animalId}>
+                        <td>
+                            <div style={{
+                                width: '48px',
+                                height: '48px',
+                                borderRadius: '10px',
+                                overflow: 'hidden',
+                                background: '#fff5f0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '22px'
+                            }}>
+                                {animal.photo
+                                    ? <img
+                                        src={animal.photo}
+                                        alt={animal.name}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                    : (animal.species === 'CAT' ? '🐱' : '🐶')
+                                }
+                            </div>
+                        </td>
                         <td>{animal.name}</td>
                         <td>{animal.species}</td>
                         <td>{animal.breed}</td>

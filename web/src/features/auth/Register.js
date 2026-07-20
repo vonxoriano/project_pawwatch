@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from './authService';
+import FormField from '../../components/FormField';
 
 function Register() {
   const navigate = useNavigate();
@@ -64,61 +65,49 @@ function Register() {
         {success && <div className="success-message">✅ {success}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Enter your full name"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Contact Number</label>
-            <input
-              type="text"
-              name="contactNumber"
-              placeholder="09XXXXXXXXX"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <FormField
+            label="Full Name"
+            name="fullName"
+            placeholder="Enter your full name"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+          />
+          <FormField
+            label="Email Address"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <FormField
+            label="Contact Number"
+            name="contactNumber"
+            placeholder="09XXXXXXXXX"
+            value={formData.contactNumber}
+            onChange={handleChange}
+            required
+          />
+          <FormField
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="Create a password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <FormField
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            placeholder="Re-enter your password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
