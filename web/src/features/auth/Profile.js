@@ -87,7 +87,7 @@ function Profile() {
                         className="btn-secondary"
                         style={{ width: 'auto', alignSelf: 'flex-start' }}
                         onClick={handleBack}>
-                        ← Back
+                        Back
                     </button>
 
                     <div className="auth-card" style={{ maxWidth: '100%' }}>

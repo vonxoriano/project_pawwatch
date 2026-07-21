@@ -36,10 +36,10 @@ function FavoritesPage() {
             <Navbar />
             <div className="dashboard-body">
                 <div className="page-header">
-                    <h2>My Favorites ❤️</h2>
                     <button className="btn-secondary" onClick={() => navigate('/dashboard')}>
                         ← Browse Animals
                     </button>
+                    
                 </div>
 
                 {error && <div className="error-message">{error}</div>}

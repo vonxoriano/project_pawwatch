@@ -222,6 +222,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .dashboard-nav .nav-user {
@@ -233,11 +234,10 @@ body {
   color: #2c2c2c;
 }
 
-.dashboard-nav button {
+.dashboard-nav .nav-btn {
   padding: 8px 20px;
   background-color: transparent;
-  border: 1.5px solid #FF6B2C;
-  color: #FF6B2C;
+  border: 1.5px solid;
   border-radius: 10px;
   font-size: 13px;
   font-weight: 600;
@@ -245,9 +245,25 @@ body {
   transition: all 0.2s;
 }
 
-.dashboard-nav button:hover {
+.dashboard-nav .nav-btn-primary {
+  border-color: #FF6B2C;
+  color: #FF6B2C;
+}
+
+.dashboard-nav .nav-btn-primary:hover {
   background-color: #FF6B2C;
   color: #fff;
+}
+
+.dashboard-nav .nav-btn-neutral {
+  border-color: #e5e5e5;
+  color: #555;
+}
+
+.dashboard-nav .nav-btn-neutral:hover {
+  background-color: #fff5f0;
+  border-color: #FF6B2C;
+  color: #FF6B2C;
 }
 
 .dashboard-body {

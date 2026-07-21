@@ -51,7 +51,7 @@ function MyApplications() {
             <Navbar />
             <div className="dashboard-body">
                 <div className="page-header">
-                    <h2>My Applications</h2>
+                    
                     <button className="btn-secondary" onClick={() => navigate('/dashboard')}>
                         ← Browse Animals
                     </button>
