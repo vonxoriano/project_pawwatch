@@ -4,7 +4,7 @@ import React from 'react';
 //   placeholder?, options? (for select: [{value,label}]), style?, min? }
 function FilterBar({ fields, onFilter, onReset, submitLabel = 'Filter', style }) {
     return (
-        <form className="search-bar" onSubmit={onFilter} style={style}>
+        <form className="search-bar" onClick={onFilter} style={style}>
             {fields.map((field, idx) => {
                 if (field.type === 'select') {
                     return (
