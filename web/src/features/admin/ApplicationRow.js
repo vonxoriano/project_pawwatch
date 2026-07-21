@@ -3,7 +3,8 @@ import React from 'react';
 const getStatusClass = (status) => {
     if (status === 'PENDING') return 'status-badge status-pending';
     if (status === 'APPROVED') return 'status-badge status-available';
-    return 'status-badge status-adopted';
+if (status === 'REJECTED') return 'status-badge status-rejected';
+return 'status-badge status-adopted';
 };
 
 const yesNo = (value) => (value === true ? 'Yes' : value === false ? 'No' : '—');

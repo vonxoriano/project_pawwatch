@@ -1,10 +1,16 @@
 import React from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 // fields: array of { type: 'text'|'select'|'date'|'number', value, onChange,
 //   placeholder?, options? (for select: [{value,label}]), style?, min? }
+//
+// For type 'date': value is a JS Date object (or null), and onChange is
+// called with a synthetic { target: { value: date } } object so existing
+// consumer handlers (written as (e) => setX(e.target.value)) work unchanged.
 function FilterBar({ fields, onFilter, onReset, submitLabel = 'Filter', style }) {
     return (
-        <form className="search-bar" onClick={onFilter} style={style}>
+        <form className="search-bar" onSubmit={onFilter} style={style}>
             {fields.map((field, idx) => {
                 if (field.type === 'select') {
                     return (
@@ -13,6 +19,18 @@ function FilterBar({ fields, onFilter, onReset, submitLabel = 'Filter', style })
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
+                    );
+                }
+                if (field.type === 'date') {
+                    return (
+                        <DatePicker
+                            key={idx}
+                            selected={field.value}
+                            onChange={(date) => field.onChange({ target: { value: date } })}
+                            placeholderText={field.placeholder || 'Select date'}
+                            dateFormat="MMM d, yyyy"
+                            className="report-date-input"
+                        />
                     );
                 }
                 return (

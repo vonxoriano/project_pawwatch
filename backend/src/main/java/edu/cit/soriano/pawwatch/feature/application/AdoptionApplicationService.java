@@ -10,6 +10,7 @@ import edu.cit.soriano.pawwatch.feature.notification.NotificationService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import edu.cit.soriano.pawwatch.feature.application.dto.ReportSummary;
 
 import java.util.List;
 
@@ -120,6 +121,23 @@ public class AdoptionApplicationService {
 
         return applicationRepository.findAll(spec);
     }
+    public ReportSummary getApplicationReport(LocalDate startDate, LocalDate endDate) {
+    if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+        throw new RuntimeException("Start date cannot be after end date");
+    }
+
+    Specification<AdoptionApplication> spec = Specification.allOf(
+            dateFrom(startDate),
+            dateTo(endDate));
+
+    List<AdoptionApplication> applications = applicationRepository.findAll(spec);
+
+    long approved = applications.stream().filter(a -> a.getStatus().equals("APPROVED")).count();
+    long rejected = applications.stream().filter(a -> a.getStatus().equals("REJECTED")).count();
+    long pending = applications.stream().filter(a -> a.getStatus().equals("PENDING")).count();
+
+    return new ReportSummary(startDate, endDate, applications.size(), approved, rejected, pending);
+}
     public AdoptionApplication processApplication(Long applicationId, ApplicationStatusRequest request) {
         AdoptionApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));

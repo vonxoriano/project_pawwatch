@@ -1,5 +1,6 @@
 package edu.cit.soriano.pawwatch.feature.application;
 
+import edu.cit.soriano.pawwatch.feature.application.dto.ReportSummary;
 import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationRequest;
 import edu.cit.soriano.pawwatch.feature.application.dto.ApplicationStatusRequest;
 import org.springframework.http.ResponseEntity;
@@ -68,4 +69,16 @@ public ResponseEntity<List<AdoptionApplication>> getAllApplications(
             @RequestBody ApplicationStatusRequest request) {
         return ResponseEntity.ok(applicationService.processApplication(id, request));
     }
+    // Admin - aggregated report for a date range
+@GetMapping("/admin/report")
+public ResponseEntity<?> getReport(
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    try {
+        ReportSummary report = applicationService.getApplicationReport(startDate, endDate);
+        return ResponseEntity.ok(report);
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+}
 }

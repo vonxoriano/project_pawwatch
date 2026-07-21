@@ -1,4 +1,4 @@
-function getApplicationFilterFields({ keyword, setKeyword, status, setStatus, dateFrom, setDateFrom, dateTo, setDateTo }) {
+function getApplicationFilterFields({ keyword, setKeyword, status, onStatusChange, dateFrom, setDateFrom, dateTo, setDateTo }) {
     return [
         {
             type: 'text',
@@ -9,7 +9,7 @@ function getApplicationFilterFields({ keyword, setKeyword, status, setStatus, da
         {
             type: 'select',
             value: status,
-            onChange: (e) => setStatus(e.target.value),
+            onChange: onStatusChange,
             options: [
                 { value: '', label: 'All Statuses' },
                 { value: 'PENDING', label: 'Pending' },
@@ -21,13 +21,13 @@ function getApplicationFilterFields({ keyword, setKeyword, status, setStatus, da
             type: 'date',
             value: dateFrom,
             onChange: (e) => setDateFrom(e.target.value),
-            style: { padding: '10px 12px' }
+            placeholder: 'Start date'
         },
         {
             type: 'date',
             value: dateTo,
             onChange: (e) => setDateTo(e.target.value),
-            style: { padding: '10px 12px' }
+            placeholder: 'End date'
         }
     ];
 }

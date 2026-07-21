@@ -9,6 +9,7 @@ import useAdminAnimals from './useAdminAnimals';
 import useAdminApplications from './useAdminApplications';
 import getAnimalFilterFields from './animalFilterConfig';
 import getApplicationFilterFields from './applicationFilterConfig';
+import ReportPanel from './ReportPanel';
 
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('animals');
@@ -19,31 +20,33 @@ function AdminDashboard() {
         showModal, setShowModal, editingAnimal,
         openAddModal, openEditModal, handleSubmit, handleDelete,
         animalKeyword, setAnimalKeyword,
-        animalSpecies, setAnimalSpecies,
-        animalGender, setAnimalGender,
-        animalStatus, setAnimalStatus,
-        handleAnimalFilter, handleAnimalReset
+        animalSpecies,
+        animalGender,
+        animalStatus,
+        handleAnimalFilter, handleAnimalReset,
+        handleSpeciesChange, handleGenderChange, handleStatusChange
     } = useAdminAnimals(setError);
 
     const {
         applications,
-        appStatus, setAppStatus,
+        appStatus,
         appKeyword, setAppKeyword,
         appDateFrom, setAppDateFrom,
         appDateTo, setAppDateTo,
-        handleAppFilter, handleAppReset, handleProcess
+        handleAppFilter, handleAppReset, handleProcess,
+        handleStatusChange: handleAppStatusChange
     } = useAdminApplications(setError, fetchAnimals);
 
     const animalFilterFields = getAnimalFilterFields({
         keyword: animalKeyword, setKeyword: setAnimalKeyword,
-        species: animalSpecies, setSpecies: setAnimalSpecies,
-        gender: animalGender, setGender: setAnimalGender,
-        status: animalStatus, setStatus: setAnimalStatus
+        species: animalSpecies, onSpeciesChange: handleSpeciesChange,
+        gender: animalGender, onGenderChange: handleGenderChange,
+        status: animalStatus, onStatusChange: handleStatusChange
     });
 
     const applicationFilterFields = getApplicationFilterFields({
         keyword: appKeyword, setKeyword: setAppKeyword,
-        status: appStatus, setStatus: setAppStatus,
+        status: appStatus, onStatusChange: handleAppStatusChange,
         dateFrom: appDateFrom, setDateFrom: setAppDateFrom,
         dateTo: appDateTo, setDateTo: setAppDateTo
     });
@@ -78,6 +81,11 @@ function AdminDashboard() {
                                 {pendingCount}
                             </span>
                         )}
+
+
+                    </TabButton>
+                    <TabButton active={activeTab === 'reports'} onClick={() => setActiveTab('reports')}>
+                        📊 Reports
                     </TabButton>
                 </div>
 
@@ -131,6 +139,7 @@ function AdminDashboard() {
                     onClose={() => setShowModal(false)}
                 />
             )}
+            {activeTab === 'reports' && <ReportPanel />}
         </div>
     );
 }

@@ -40,6 +40,21 @@ function AdopterDashboard() {
         fetchAnimals('', '', '', '', '');
     };
 
+    // Species/Gender dropdowns apply immediately on selection (server-side
+    // fetch), matching the same instant-apply behavior used on the admin
+    // Animal Listings and Adoption Applications tabs.
+    const handleSpeciesChange = (e) => {
+        const value = e.target.value;
+        setSpecies(value);
+        fetchAnimals(keyword, value, gender, minAge, maxAge);
+    };
+
+    const handleGenderChange = (e) => {
+        const value = e.target.value;
+        setGender(value);
+        fetchAnimals(keyword, species, value, minAge, maxAge);
+    };
+
     return (
         <div className="dashboard-container">
             <Navbar />
@@ -61,7 +76,7 @@ function AdopterDashboard() {
                         {
                             type: 'select',
                             value: species,
-                            onChange: (e) => setSpecies(e.target.value),
+                            onChange: handleSpeciesChange,
                             options: [
                                 { value: '', label: 'All Species' },
                                 { value: 'CAT', label: 'Cat' },
@@ -71,7 +86,7 @@ function AdopterDashboard() {
                         {
                             type: 'select',
                             value: gender,
-                            onChange: (e) => setGender(e.target.value),
+                            onChange: handleGenderChange,
                             options: [
                                 { value: '', label: 'All Genders' },
                                 { value: 'MALE', label: 'Male' },

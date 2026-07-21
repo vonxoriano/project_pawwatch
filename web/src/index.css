@@ -374,6 +374,137 @@ body {
   font-size: 11px;
   color: #999;
 }
+/* ===== ADOPTION REPORT ===== */
+.report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.report-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 5px solid #e5e5e5;
+}
+
+.report-card-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.report-card-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e1e1e;
+}
+
+.report-card-approved {
+  border-left-color: #27ae60;
+}
+
+.report-card-approved .report-card-value {
+  color: #27ae60;
+}
+
+.report-card-rejected {
+  border-left-color: #e5342e;
+}
+
+.report-card-rejected .report-card-value {
+  color: #e5342e;
+}
+
+.report-card-pending {
+  border-left-color: #f39c12;
+}
+
+.report-card-pending .report-card-value {
+  color: #f39c12;
+}
+
+.status-rejected {
+  background: #fdecea;
+  color: #e5342e;
+}
+/* ===== DATE PICKER (react-datepicker) ===== */
+.report-date-input {
+  flex: 1;
+  min-width: 160px;
+  padding: 10px 16px;
+  border: 1.5px solid #ebebeb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #2c2c2c;
+  background: #fafafa;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.report-date-input:focus {
+  border-color: #FF6B2C;
+  background: #fff;
+}
+
+.react-datepicker {
+  font-family: inherit;
+  border: 1.5px solid #ebebeb;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.react-datepicker__header {
+  background-color: #FF6B2C;
+  border-bottom: none;
+  padding-top: 12px;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: #fff;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: #fff;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #FF6B2C;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--keyboard-selected:hover {
+  background-color: #e85a1f;
+}
+
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-selecting-range {
+  background-color: #ffe4d6;
+  border-radius: 8px;
+  color: #1e1e1e;
+}
+
+.react-datepicker__day:hover {
+  border-radius: 8px;
+  background-color: #fff0e8;
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
 
 .dashboard-body {
   padding: 60px 40px;

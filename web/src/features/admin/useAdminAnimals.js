@@ -38,6 +38,28 @@ function useAdminAnimals(setError) {
         });
     };
 
+    // Dropdown filters (species/gender/status) apply immediately on selection,
+    // instead of waiting for the "Filter" button click. Both the draft input
+    // state and the applied-filter state are updated with the new value here
+    // (not the stale state) so the grid re-filters right away.
+    const handleSpeciesChange = (e) => {
+        const value = e.target.value;
+        setAnimalSpecies(value);
+        setAppliedAnimalFilters(prev => ({ ...prev, species: value }));
+    };
+
+    const handleGenderChange = (e) => {
+        const value = e.target.value;
+        setAnimalGender(value);
+        setAppliedAnimalFilters(prev => ({ ...prev, gender: value }));
+    };
+
+    const handleStatusChange = (e) => {
+        const value = e.target.value;
+        setAnimalStatus(value);
+        setAppliedAnimalFilters(prev => ({ ...prev, status: value }));
+    };
+
     const handleAnimalReset = () => {
         setAnimalKeyword('');
         setAnimalSpecies('');
@@ -106,7 +128,8 @@ function useAdminAnimals(setError) {
         animalSpecies, setAnimalSpecies,
         animalGender, setAnimalGender,
         animalStatus, setAnimalStatus,
-        handleAnimalFilter, handleAnimalReset
+        handleAnimalFilter, handleAnimalReset,
+        handleSpeciesChange, handleGenderChange, handleStatusChange
     };
 }
 

@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react';
 import applicationService from '../application/applicationService';
+import { formatDate } from '../../utils/dateFormat';
 
 function useAdminApplications(setError, refetchAnimals) {
     const [applications, setApplications] = useState([]);
     const [appStatus, setAppStatus] = useState('');
     const [appKeyword, setAppKeyword] = useState('');
-    const [appDateFrom, setAppDateFrom] = useState('');
-    const [appDateTo, setAppDateTo] = useState('');
+    const [appDateFrom, setAppDateFrom] = useState(null);
+    const [appDateTo, setAppDateTo] = useState(null);
 
     useEffect(() => {
         fetchApplications();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const fetchApplications = async (status = '', keyword = '', dateFrom = '', dateTo = '') => {
+    const fetchApplications = async (status = '', keyword = '', dateFrom = null, dateTo = null) => {
         try {
-            const res = await applicationService.getAllApplications(status, keyword, dateFrom, dateTo);
+            const res = await applicationService.getAllApplications(
+                status, keyword, formatDate(dateFrom), formatDate(dateTo)
+            );
             setApplications(res.data);
         } catch (err) {
             setError('Failed to load applications.');
@@ -27,12 +30,20 @@ function useAdminApplications(setError, refetchAnimals) {
         fetchApplications(appStatus, appKeyword, appDateFrom, appDateTo);
     };
 
+    // Status dropdown applies immediately on selection (server-side fetch),
+    // matching the same instant-apply behavior as the Animal Listings tab.
+    const handleStatusChange = (e) => {
+        const value = e.target.value;
+        setAppStatus(value);
+        fetchApplications(value, appKeyword, appDateFrom, appDateTo);
+    };
+
     const handleAppReset = () => {
         setAppStatus('');
         setAppKeyword('');
-        setAppDateFrom('');
-        setAppDateTo('');
-        fetchApplications('', '', '', '');
+        setAppDateFrom(null);
+        setAppDateTo(null);
+        fetchApplications('', '', null, null);
     };
 
     const handleProcess = async (id, status, remarks) => {
@@ -55,7 +66,8 @@ function useAdminApplications(setError, refetchAnimals) {
         appKeyword, setAppKeyword,
         appDateFrom, setAppDateFrom,
         appDateTo, setAppDateTo,
-        handleAppFilter, handleAppReset, handleProcess
+        handleAppFilter, handleAppReset, handleProcess,
+        handleStatusChange
     };
 }
 

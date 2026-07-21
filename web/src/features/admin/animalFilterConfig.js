@@ -1,4 +1,9 @@
-function getAnimalFilterFields({ keyword, setKeyword, species, setSpecies, gender, setGender, status, setStatus }) {
+function getAnimalFilterFields({
+    keyword, setKeyword,
+    species, onSpeciesChange,
+    gender, onGenderChange,
+    status, onStatusChange
+}) {
     return [
         {
             type: 'text',
@@ -9,7 +14,7 @@ function getAnimalFilterFields({ keyword, setKeyword, species, setSpecies, gende
         {
             type: 'select',
             value: species,
-            onChange: (e) => setSpecies(e.target.value),
+            onChange: onSpeciesChange,
             options: [
                 { value: '', label: 'All Species' },
                 { value: 'CAT', label: 'Cat' },
@@ -19,7 +24,7 @@ function getAnimalFilterFields({ keyword, setKeyword, species, setSpecies, gende
         {
             type: 'select',
             value: gender,
-            onChange: (e) => setGender(e.target.value),
+            onChange: onGenderChange,
             options: [
                 { value: '', label: 'All Genders' },
                 { value: 'MALE', label: 'Male' },
@@ -29,7 +34,7 @@ function getAnimalFilterFields({ keyword, setKeyword, species, setSpecies, gende
         {
             type: 'select',
             value: status,
-            onChange: (e) => setStatus(e.target.value),
+            onChange: onStatusChange,
             options: [
                 { value: '', label: 'All Statuses' },
                 { value: 'AVAILABLE', label: 'Available' },
