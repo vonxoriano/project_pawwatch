@@ -406,6 +406,40 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.animal-card-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.favorite-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.favorite-toggle-btn:hover {
+  background-color: #fff0eb;
+  transform: scale(1.08);
+}
+
+.favorite-toggle-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 
 .status-badge {
