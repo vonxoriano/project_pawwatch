@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../features/auth/authService';
 import Modal from './Modal';
+import NotificationBell from '../features/notification/NotificationBell';
 
 function Navbar() {
     const navigate = useNavigate();
@@ -30,6 +31,7 @@ function Navbar() {
             </button>
 
             <div className={`nav-right ${menuOpen ? 'open' : ''}`}>
+                {role === 'ADOPTER' && <NotificationBell />}
                 {role === 'ADOPTER' && (
                     <button className="nav-btn nav-btn-neutral" onClick={() => navigate('/favorites')}>
                         ❤️ Favorites

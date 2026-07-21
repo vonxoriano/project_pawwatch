@@ -6,6 +6,7 @@ import edu.cit.soriano.pawwatch.feature.animal.Animal;
 import edu.cit.soriano.pawwatch.feature.auth.User;
 import edu.cit.soriano.pawwatch.feature.animal.AnimalRepository;
 import edu.cit.soriano.pawwatch.feature.auth.UserRepository;
+import edu.cit.soriano.pawwatch.feature.notification.NotificationService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -20,14 +21,17 @@ public class AdoptionApplicationService {
     private final AdoptionApplicationRepository applicationRepository;
     private final AnimalRepository animalRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     public AdoptionApplicationService(
             AdoptionApplicationRepository applicationRepository,
             AnimalRepository animalRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            NotificationService notificationService) {
         this.applicationRepository = applicationRepository;
         this.animalRepository = animalRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public AdoptionApplication submitApplication(String email, ApplicationRequest request) {
@@ -128,6 +132,8 @@ public class AdoptionApplicationService {
             animal.setAdoptionStatus("ADOPTED");
             animalRepository.save(animal);
 
+            notifyApplicant(application, "APPROVED");
+
             List<AdoptionApplication> otherApplications = applicationRepository
                     .findByAnimal(animal);
             for (AdoptionApplication other : otherApplications) {
@@ -135,6 +141,7 @@ public class AdoptionApplicationService {
                         && other.getStatus().equals("PENDING")) {
                     other.setStatus("REJECTED");
                     applicationRepository.save(other);
+                    notifyApplicant(other, "REJECTED");
                 }
             }
         }
@@ -150,9 +157,31 @@ public class AdoptionApplicationService {
                 animal.setAdoptionStatus("AVAILABLE");
                 animalRepository.save(animal);
             }
+
+            notifyApplicant(application, "REJECTED");
         }
 
         return applicationRepository.save(application);
+    }
+
+    private void notifyApplicant(AdoptionApplication application, String outcome) {
+        String animalName = application.getAnimal().getName();
+        String verb = outcome.equals("APPROVED") ? "approved" : "rejected";
+        StringBuilder message = new StringBuilder("Your application for ")
+                .append(animalName)
+                .append(" has been ")
+                .append(verb)
+                .append(".");
+
+        if (application.getRemarks() != null && !application.getRemarks().isBlank()) {
+            message.append(" Remarks: ").append(application.getRemarks());
+        }
+
+        notificationService.createNotification(
+                application.getUser(),
+                message.toString(),
+                application.getApplicationId()
+        );
     }
 
     public void cancelApplication(Long applicationId, String email) {
