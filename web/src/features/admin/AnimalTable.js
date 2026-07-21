@@ -18,6 +18,7 @@ function AnimalTable({ animals, onEdit, onDelete }) {
     }
 
     return (
+        <div className="admin-table-wrapper">
         <table className="admin-table">
             <thead>
                 <tr>
@@ -76,6 +77,7 @@ function AnimalTable({ animals, onEdit, onDelete }) {
                 ))}
             </tbody>
         </table>
+        </div>
     );
 }
 

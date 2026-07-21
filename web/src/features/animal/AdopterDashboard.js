@@ -84,7 +84,7 @@ function AdopterDashboard() {
                             value: minAge,
                             onChange: (e) => setMinAge(e.target.value),
                             placeholder: 'Min age',
-                            style: { width: '90px' }
+                            style: { flex: '0 1 90px', minWidth: '70px' }
                         },
                         {
                             type: 'number',
@@ -92,7 +92,7 @@ function AdopterDashboard() {
                             value: maxAge,
                             onChange: (e) => setMaxAge(e.target.value),
                             placeholder: 'Max age',
-                            style: { width: '90px' }
+                            style: { flex: '0 1 90px', minWidth: '70px' }
                         }
                     ]}
                     onFilter={handleSearch}

@@ -266,6 +266,16 @@ body {
   color: #FF6B2C;
 }
 
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #FF6B2C;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
 .dashboard-body {
   padding: 60px 40px;
   display: flex;
@@ -319,6 +329,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
   margin-bottom: 32px;
 }
 
@@ -365,7 +377,9 @@ body {
 /* ===== ANIMAL CARDS ===== */
 .animals-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  max-width: 1400px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 24px;
 }
 
@@ -485,6 +499,8 @@ body {
 .search-bar {
   display: flex;
   gap: 12px;
+  width: 100%;
+  max-width: 1400px;
   margin-bottom: 28px;
   flex-wrap: wrap;
 }
@@ -753,4 +769,91 @@ body {
 
 .empty-state p {
   font-size: 15px;
+}
+
+/* =====================================================================
+   RESPONSIVE BREAKPOINTS
+   Desktop: default (> 768px)
+   Tablet:  <= 768px
+   Mobile:  <= 480px
+   Same two breakpoints reused across the navbar, animal card grid, and
+   filter bar so they stay coherent with each other at every width.
+   ===================================================================== */
+
+/* ---- Table safety net (Admin Animal Listings / Applications) ----
+   Not a grid layout, but wrapping the table in a scrollable container
+   prevents it from ever forcing the whole page to overflow horizontally
+   at narrow widths, without breaking the table's own row/column layout. */
+.admin-table-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  /* ---- Navbar: collapse into hamburger dropdown ---- */
+  .dashboard-nav {
+    position: relative;
+  }
+
+  .nav-hamburger {
+    display: block;
+  }
+
+  .dashboard-nav .nav-right {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    background: #ffffff;
+    padding: 16px 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #fff0e8;
+    z-index: 100;
+  }
+
+  .dashboard-nav .nav-right.open {
+    display: flex;
+  }
+
+  .dashboard-nav .nav-btn,
+  .dashboard-nav .nav-user {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* ---- Page padding: reclaim horizontal space ---- */
+  .dashboard-body {
+    padding: 40px 20px;
+  }
+
+  /* ---- Animal card grid: fewer, narrower columns ---- */
+  .animals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* ---- Page padding: mobile ---- */
+  .dashboard-body {
+    padding: 24px 16px;
+  }
+
+  /* ---- Animal card grid: 1-2 columns ---- */
+  .animals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  /* ---- Filter bar: stack every field full-width, one per row ---- */
+  .search-bar input,
+  .search-bar select {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
 }

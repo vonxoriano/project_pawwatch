@@ -5,9 +5,10 @@ import Modal from './Modal';
 
 function Navbar() {
     const navigate = useNavigate();
-    const fullName = localStorage.getItem('fullName');
+   
     const role = localStorage.getItem('role');
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const confirmLogout = () => {
         authService.logout();
@@ -20,7 +21,15 @@ function Navbar() {
                 <span>🐾</span>
                 <h1>PawWatch</h1>
             </div>
-            <div className="nav-right">
+
+            <button
+                className="nav-hamburger"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle menu">
+                {menuOpen ? '✕' : '☰'}
+            </button>
+
+            <div className={`nav-right ${menuOpen ? 'open' : ''}`}>
                 {role === 'ADOPTER' && (
                     <button className="nav-btn nav-btn-neutral" onClick={() => navigate('/favorites')}>
                         ❤️ Favorites
@@ -31,10 +40,9 @@ function Navbar() {
                         My Applications
                     </button>
                 )}
-                <button className="nav-btn nav-btn-neutral" onClick={() => navigate('/profile')}>
+                 <button className="nav-btn nav-btn-neutral" onClick={() => navigate('/profile')}>
                         My Profile
                     </button>
-                
                 <button className="nav-btn nav-btn-primary" onClick={() => setShowLogoutConfirm(true)}>
                     Log Out
                 </button>
@@ -50,7 +58,7 @@ function Navbar() {
                             Cancel
                         </button>
                         <button
-                            className="btn-secondary"
+                            className="btn-primary"
                             style={{ width: 'auto', padding: '10px 24px' }}
                             onClick={confirmLogout}>
                             Log Out
