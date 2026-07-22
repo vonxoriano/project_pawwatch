@@ -20,6 +20,8 @@ object PawWatchColors {
     val StatusPendingText = Color(0xFFE08600)
     val StatusAdoptedBg = Color(0xFFECECEC)
     val StatusAdoptedText = Color(0xFF7A7A7A)
+    val StatusRejectedBg = Color(0xFFFCE0DE)
+    val StatusRejectedText = Color(0xFFE53935)
 
     val EditBlue = Color(0xFF3498DB)
     val DeleteRed = Color(0xFFE53935)

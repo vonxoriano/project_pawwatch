@@ -86,3 +86,12 @@ data class Notification(
     val applicationId: Long? = null,
     val user: ApplicationUser? = null
 )
+
+data class ReportSummary(
+    val startDate: String?,
+    val endDate: String?,
+    val totalApplications: Long,
+    val approvedCount: Long,
+    val rejectedCount: Long,
+    val pendingCount: Long
+)

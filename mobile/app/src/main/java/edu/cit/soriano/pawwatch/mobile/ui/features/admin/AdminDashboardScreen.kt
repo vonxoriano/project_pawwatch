@@ -34,7 +34,7 @@ fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
     val token = "Bearer ${sessionManager.getToken()}"
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("🐾 Animal Listings", "📋 Applications")
+    val tabs = listOf("🐾 Animal Listings", "📋 Applications", "📊 Reports")
 
     var animals by remember { mutableStateOf(listOf<Animal>()) }
     var applications by remember { mutableStateOf(listOf<AdoptionApplication>()) }
@@ -151,6 +151,7 @@ fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
                         }
                     }
                 )
+                2 -> ReportPanel()
             }
         }
     }

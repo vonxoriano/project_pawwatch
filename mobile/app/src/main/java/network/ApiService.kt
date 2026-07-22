@@ -137,4 +137,12 @@ interface ApiService {
     suspend fun markAllNotificationsAsRead(
         @Header("Authorization") token: String
     ): Response<String>
+
+    // Reports - Admin
+    @GET("api/applications/admin/report")
+    suspend fun getReport(
+        @Header("Authorization") token: String,
+        @Query("startDate") startDate: String? = null,
+        @Query("endDate") endDate: String? = null
+    ): Response<ReportSummary>
 }
