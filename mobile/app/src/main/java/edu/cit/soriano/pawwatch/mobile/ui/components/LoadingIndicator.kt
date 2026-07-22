@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 
 @Composable
-fun LoadingIndicator() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun LoadingIndicator(modifier: Modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         CircularProgressIndicator(color = PawWatchColors.Primary)
     }
 }
