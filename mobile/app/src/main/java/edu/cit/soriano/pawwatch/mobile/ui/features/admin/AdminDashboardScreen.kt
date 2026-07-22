@@ -22,6 +22,7 @@ import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 
 // Admin feature slice - handles animal management and application processing.
 // Tab content and card composables live in AnimalTable.kt / ApplicationsTable.kt;
@@ -42,6 +43,11 @@ fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
     var showAddDialog by remember { mutableStateOf(false) }
     var editingAnimal by remember { mutableStateOf<Animal?>(null) }
 
+    var appKeyword by remember { mutableStateOf("") }
+    var appStatus by remember { mutableStateOf("") }
+    var appDateFromMillis by remember { mutableStateOf<Long?>(null) }
+    var appDateToMillis by remember { mutableStateOf<Long?>(null) }
+
     fun fetchAnimals() {
         scope.launch {
             try {
@@ -56,12 +62,28 @@ fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
     fun fetchApplications() {
         scope.launch {
             try {
-                val res = RetrofitClient.apiService.getAllApplications(token)
+                val fromStr = appDateFromMillis?.let { millisToLocalDate(it).format(DateTimeFormatter.ISO_LOCAL_DATE) }
+                val toStr = appDateToMillis?.let { millisToLocalDate(it).format(DateTimeFormatter.ISO_LOCAL_DATE) }
+                val res = RetrofitClient.apiService.getAllApplications(
+                    token,
+                    status = appStatus.ifBlank { null },
+                    keyword = appKeyword.ifBlank { null },
+                    dateFrom = fromStr,
+                    dateTo = toStr
+                )
                 if (res.isSuccessful) applications = res.body() ?: emptyList()
             } catch (e: Exception) {
                 Toast.makeText(context, "Failed to load applications", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun resetApplicationFilters() {
+        appKeyword = ""
+        appStatus = ""
+        appDateFromMillis = null
+        appDateToMillis = null
+        fetchApplications()
     }
 
     LaunchedEffect(Unit) {
@@ -134,6 +156,16 @@ fun AdminDashboardScreen(onProfileClick: () -> Unit, onLogout: () -> Unit) {
                 )
                 1 -> ApplicationsTab(
                     applications = applications,
+                    keyword = appKeyword,
+                    onKeywordChange = { appKeyword = it },
+                    status = appStatus,
+                    onStatusChange = { appStatus = it },
+                    dateFromMillis = appDateFromMillis,
+                    onDateFromChange = { appDateFromMillis = it },
+                    dateToMillis = appDateToMillis,
+                    onDateToChange = { appDateToMillis = it },
+                    onFilter = { fetchApplications() },
+                    onReset = { resetApplicationFilters() },
                     onProcess = { appId, status, remarks ->
                         scope.launch {
                             try {

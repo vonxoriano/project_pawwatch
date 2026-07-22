@@ -29,10 +29,10 @@ import java.time.format.DateTimeFormatter
 // DatePickerState.selectedDateMillis is UTC midnight of the picked date, not
 // local midnight - converting with the device's zone instead of UTC would
 // shift the date back a day for anyone west of UTC.
-private fun millisToLocalDate(millis: Long): LocalDate =
+internal fun millisToLocalDate(millis: Long): LocalDate =
     Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate()
 
-private val displayFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
+internal val displayFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
 
 @Composable
 fun ReportPanel() {

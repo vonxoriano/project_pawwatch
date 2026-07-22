@@ -90,7 +90,11 @@ interface ApiService {
     // Applications - Admin
     @GET("api/applications/admin/all")
     suspend fun getAllApplications(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("status") status: String? = null,
+        @Query("keyword") keyword: String? = null,
+        @Query("dateFrom") dateFrom: String? = null,
+        @Query("dateTo") dateTo: String? = null
     ): Response<List<AdoptionApplication>>
 
     @PATCH("api/applications/admin/process/{id}")
