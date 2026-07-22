@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.AdoptionApplication
 import edu.cit.soriano.pawwatch.mobile.ui.components.StatusBadge
+import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 
 private fun yesNo(value: Boolean?): String = when (value) {
     true -> "Yes"
@@ -81,7 +82,7 @@ fun ApplicationCard(
                     onClick = onCancel,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFE53935)
+                        contentColor = PawWatchColors.DeleteRed
                     )
                 ) {
                     Text("Cancel Application")

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.Animal
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
+import edu.cit.soriano.pawwatch.mobile.ui.components.PrimaryButton
 import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import kotlinx.coroutines.launch
@@ -116,12 +117,12 @@ fun AnimalBrowseScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(
+                PrimaryButton(
+                    text = "Search",
                     onClick = { fetchAnimals() },
-                    colors = ButtonDefaults.buttonColors(containerColor = PawWatchColors.Primary),
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.weight(1f)
-                ) { Text("Search") }
+                )
                 OutlinedButton(
                     onClick = { keyword = ""; species = ""; fetchAnimals() },
                     shape = RoundedCornerShape(10.dp),

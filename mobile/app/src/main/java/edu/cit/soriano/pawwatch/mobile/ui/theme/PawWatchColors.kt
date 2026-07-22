@@ -12,6 +12,7 @@ object PawWatchColors {
     val TextGray = Color(0xFF9A948C)
     val InputBg = Color(0xFFE9EEF9)
     val Divider = Color(0xFFF0EBE5)
+    val TagBackground = Color(0xFFF5F5F5)
 
     val StatusAvailableBg = Color(0xFFDFF5E1)
     val StatusAvailableText = Color(0xFF2E7D32)

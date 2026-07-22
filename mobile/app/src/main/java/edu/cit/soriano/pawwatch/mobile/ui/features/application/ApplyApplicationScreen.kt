@@ -3,11 +3,7 @@ package edu.cit.soriano.pawwatch.mobile.ui.features.application
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,7 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.ApplicationRequest
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
+import edu.cit.soriano.pawwatch.mobile.ui.components.ChoiceChipRow
+import edu.cit.soriano.pawwatch.mobile.ui.components.DetailTopBar
+import edu.cit.soriano.pawwatch.mobile.ui.components.LabeledTextField
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
+import edu.cit.soriano.pawwatch.mobile.ui.components.PrimaryButton
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -76,21 +76,7 @@ fun ApplyApplicationScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Adoption Application") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFFF6B2C),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
-            )
-        }
+        topBar = { DetailTopBar(title = "Adoption Application", onBack = onBack) }
     ) { padding ->
         if (loading) {
             LoadingIndicator()
@@ -112,95 +98,98 @@ fun ApplyApplicationScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text("Do you own or rent your home?", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-            Row(modifier = Modifier.fillMaxWidth()) {
-                FilterChip(
-                    selected = housingType == "OWN",
-                    onClick = { housingType = "OWN" },
-                    label = { Text("Own") },
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                FilterChip(
-                    selected = housingType == "RENT",
-                    onClick = { housingType = "RENT" },
-                    label = { Text("Rent") }
-                )
-            }
+            ChoiceChipRow(
+                options = listOf("Own" to "OWN", "Rent" to "RENT"),
+                selected = housingType,
+                onSelect = { housingType = it }
+            )
             Spacer(modifier = Modifier.height(12.dp))
 
             if (housingType == "RENT") {
                 Text("Do you have landlord permission to keep pets?", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                YesNoRow(value = hasLandlordPermission, onChange = { hasLandlordPermission = it })
+                ChoiceChipRow(
+                    options = listOf("Yes" to true, "No" to false),
+                    selected = hasLandlordPermission,
+                    onSelect = { hasLandlordPermission = it }
+                )
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
             Text("Do you have a yard?", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-            YesNoRow(value = hasYard, onChange = { hasYard = it })
+            ChoiceChipRow(
+                options = listOf("Yes" to true, "No" to false),
+                selected = hasYard,
+                onSelect = { hasYard = it }
+            )
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "How many members are in your household?",
                 value = householdMembers,
                 onValueChange = { householdMembers = it },
-                label = { Text("How many members are in your household?") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
+                keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(12.dp))
 
             Text("Do you have young children at home?", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-            YesNoRow(value = hasYoungChildren, onChange = { hasYoungChildren = it })
+            ChoiceChipRow(
+                options = listOf("Yes" to true, "No" to false),
+                selected = hasYoungChildren,
+                onSelect = { hasYoungChildren = it }
+            )
             Spacer(modifier = Modifier.height(12.dp))
 
             Text("Do you currently have other pets?", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-            YesNoRow(value = hasOtherPets, onChange = { hasOtherPets = it })
+            ChoiceChipRow(
+                options = listOf("Yes" to true, "No" to false),
+                selected = hasOtherPets,
+                onSelect = { hasOtherPets = it }
+            )
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Describe your experience with pets",
                 value = petExperience,
                 onValueChange = { petExperience = it },
-                label = { Text("Describe your experience with pets") },
-                modifier = Modifier.fillMaxWidth(),
                 minLines = 2
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Hours per day the pet will be left alone",
                 value = hoursAwayDaily,
                 onValueChange = { hoursAwayDaily = it },
-                label = { Text("Hours per day the pet will be left alone") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
+                keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Why do you want to adopt?",
                 value = reasonForAdopting,
                 onValueChange = { reasonForAdopting = it },
-                label = { Text("Why do you want to adopt?") },
-                modifier = Modifier.fillMaxWidth(),
                 minLines = 2
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Additional remarks (optional)",
                 value = remarks,
-                onValueChange = { remarks = it },
-                label = { Text("Additional remarks (optional)") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { remarks = it }
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Checkbox(checked = agreesToReturnPolicy, onCheckedChange = { agreesToReturnPolicy = it })
-                Text("I agree to the shelter's return policy if the adoption doesn't work out.", fontSize = 13.sp)
-            }
+            AgreementCheckbox(checked = agreesToReturnPolicy, onCheckedChange = { agreesToReturnPolicy = it })
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(
+            PrimaryButton(
+                text = if (submitting) "Submitting..." else "Submit Application",
+                enabled = !submitting,
+                fontSize = 16.sp,
                 onClick = {
                     val validationError = validate()
                     if (validationError != null) {
                         Toast.makeText(context, validationError, Toast.LENGTH_SHORT).show()
-                        return@Button
+                        return@PrimaryButton
                     }
                     submitting = true
                     scope.launch {
@@ -234,30 +223,8 @@ fun ApplyApplicationScreen(
                             submitting = false
                         }
                     }
-                },
-                enabled = !submitting,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6B2C))
-            ) {
-                Text(if (submitting) "Submitting..." else "Submit Application", fontSize = 16.sp)
-            }
+                }
+            )
         }
-    }
-}
-
-@Composable
-private fun YesNoRow(value: Boolean?, onChange: (Boolean) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        FilterChip(
-            selected = value == true,
-            onClick = { onChange(true) },
-            label = { Text("Yes") },
-            modifier = Modifier.padding(end = 8.dp)
-        )
-        FilterChip(
-            selected = value == false,
-            onClick = { onChange(false) },
-            label = { Text("No") }
-        )
     }
 }

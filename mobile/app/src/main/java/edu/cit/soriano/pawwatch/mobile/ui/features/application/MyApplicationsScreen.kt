@@ -4,8 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
+import edu.cit.soriano.pawwatch.mobile.ui.components.DetailTopBar
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
@@ -44,21 +43,7 @@ fun MyApplicationsScreen(onBack: () -> Unit) {
     LaunchedEffect(Unit) { fetchApplications() }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("My Applications") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFFF6B2C),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
-            )
-        }
+        topBar = { DetailTopBar(title = "My Applications", onBack = onBack) }
     ) { padding ->
         when {
             loading -> LoadingIndicator()

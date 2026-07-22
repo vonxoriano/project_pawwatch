@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,12 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.LoginRequest
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
+import edu.cit.soriano.pawwatch.mobile.ui.components.LabeledTextField
+import edu.cit.soriano.pawwatch.mobile.ui.components.PrimaryButton
+import edu.cit.soriano.pawwatch.mobile.ui.components.loginFieldColors
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 import edu.cit.soriano.pawwatch.mobile.util.SessionManager
 import kotlinx.coroutines.launch
@@ -90,60 +91,39 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Text(
-                    "Email Address",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = PawWatchColors.TextDark,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                OutlinedTextField(
+                LabeledTextField(
+                    label = "Email Address",
                     value = email,
                     onValueChange = { email = it },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = PawWatchColors.InputBg,
-                        focusedContainerColor = PawWatchColors.InputBg,
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = PawWatchColors.Primary
-                    )
+                    useFloatingLabel = false,
+                    keyboardType = KeyboardType.Email,
+                    colors = loginFieldColors()
                 )
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                Text(
-                    "Password",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = PawWatchColors.TextDark,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                OutlinedTextField(
+                LabeledTextField(
+                    label = "Password",
                     value = password,
                     onValueChange = { password = it },
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = PawWatchColors.InputBg,
-                        focusedContainerColor = PawWatchColors.InputBg,
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = PawWatchColors.Primary
-                    )
+                    useFloatingLabel = false,
+                    isPassword = true,
+                    keyboardType = KeyboardType.Password,
+                    colors = loginFieldColors()
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
+                PrimaryButton(
+                    text = if (loading) "Logging in..." else "Log In",
+                    enabled = !loading,
+                    shape = RoundedCornerShape(10.dp),
+                    buttonHeight = 48.dp,
+                    fontWeight = FontWeight.Bold,
                     onClick = {
                         if (email.isBlank() || password.isBlank()) {
                             Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                            return@Button
+                            return@PrimaryButton
                         }
                         loading = true
                         scope.launch {
@@ -163,16 +143,8 @@ fun LoginScreen(
                                 loading = false
                             }
                         }
-                    },
-                    enabled = !loading,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = PawWatchColors.Primary),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                ) {
-                    Text(if (loading) "Logging in..." else "Log In", fontWeight = FontWeight.Bold)
-                }
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
