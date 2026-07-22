@@ -70,3 +70,10 @@ data class ApplicationStatusRequest(
     val status: String,
     val remarks: String
 )
+
+data class Favorite(
+    val favoriteId: Long,
+    val animal: Animal,
+    val user: ApplicationUser? = null,
+    val dateAdded: String? = null
+)

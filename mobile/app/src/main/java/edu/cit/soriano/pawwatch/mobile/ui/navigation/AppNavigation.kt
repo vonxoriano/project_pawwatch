@@ -11,6 +11,7 @@ import edu.cit.soriano.pawwatch.mobile.ui.features.admin.AdminDashboardScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.application.MyApplicationsScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalBrowseScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.animal.AnimalDetailScreen
+import edu.cit.soriano.pawwatch.mobile.ui.features.animal.FavoritesScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.application.ApplyApplicationScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.LoginScreen
 import edu.cit.soriano.pawwatch.mobile.ui.features.auth.RegisterScreen
@@ -23,6 +24,7 @@ object Routes {
     const val ADMIN_DASHBOARD = "admin_dashboard"
     const val ANIMAL_DETAIL = "animal_detail/{animalId}"
     const val MY_APPLICATIONS = "my_applications"
+    const val FAVORITES = "favorites"
     const val PROFILE = "profile"
     const val APPLY_APPLICATION = "apply_application/{animalId}"
 
@@ -76,6 +78,9 @@ fun AppNavigation() {
                 onMyApplicationsClick = {
                     navController.navigate(Routes.MY_APPLICATIONS)
                 },
+                onFavoritesClick = {
+                    navController.navigate(Routes.FAVORITES)
+                },
                 onProfileClick = {
                     navController.navigate(Routes.PROFILE)
                 },
@@ -119,6 +124,15 @@ fun AppNavigation() {
 
         composable(Routes.MY_APPLICATIONS) {
             MyApplicationsScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.FAVORITES) {
+            FavoritesScreen(
+                onAnimalClick = { animalId ->
+                    navController.navigate(Routes.animalDetail(animalId))
+                },
                 onBack = { navController.popBackStack() }
             )
         }

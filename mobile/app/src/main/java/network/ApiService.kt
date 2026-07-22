@@ -96,4 +96,28 @@ interface ApiService {
         @Path("id") id: Long,
         @Body request: ApplicationStatusRequest
     ): Response<AdoptionApplication>
+
+    // Favorites - Adopter
+    @POST("api/favorites/add/{animalId}")
+    suspend fun addFavorite(
+        @Header("Authorization") token: String,
+        @Path("animalId") animalId: Long
+    ): Response<Favorite>
+
+    @DELETE("api/favorites/remove/{animalId}")
+    suspend fun removeFavorite(
+        @Header("Authorization") token: String,
+        @Path("animalId") animalId: Long
+    ): Response<String>
+
+    @GET("api/favorites/my")
+    suspend fun getMyFavorites(
+        @Header("Authorization") token: String
+    ): Response<List<Favorite>>
+
+    @GET("api/favorites/check/{animalId}")
+    suspend fun checkFavorite(
+        @Header("Authorization") token: String,
+        @Path("animalId") animalId: Long
+    ): Response<Boolean>
 }

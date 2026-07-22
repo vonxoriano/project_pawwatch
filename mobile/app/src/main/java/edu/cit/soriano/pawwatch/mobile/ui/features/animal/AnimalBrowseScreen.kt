@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 fun AnimalBrowseScreen(
     onAnimalClick: (Long) -> Unit,
     onMyApplicationsClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -81,12 +82,21 @@ fun AnimalBrowseScreen(
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            OutlinedButton(
-                onClick = onMyApplicationsClick,
-                shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
-            ) {
-                Text("My Applications", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(
+                    onClick = onFavoritesClick,
+                    shape = RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
+                ) {
+                    Text("❤️ Favorites", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                }
+                OutlinedButton(
+                    onClick = onMyApplicationsClick,
+                    shape = RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
+                ) {
+                    Text("My Applications", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
 
             Spacer(modifier = Modifier.height(14.dp))
