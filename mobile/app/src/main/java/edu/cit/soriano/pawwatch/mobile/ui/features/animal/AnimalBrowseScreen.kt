@@ -16,10 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.Animal
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
+import edu.cit.soriano.pawwatch.mobile.ui.components.ChoiceChipRow
+import edu.cit.soriano.pawwatch.mobile.ui.components.LabeledTextField
 import edu.cit.soriano.pawwatch.mobile.ui.components.LoadingIndicator
 import edu.cit.soriano.pawwatch.mobile.ui.components.PrimaryButton
 import edu.cit.soriano.pawwatch.mobile.ui.components.TopBar
@@ -39,6 +42,9 @@ fun AnimalBrowseScreen(
     var animals by remember { mutableStateOf(listOf<Animal>()) }
     var keyword by remember { mutableStateOf("") }
     var species by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var minAge by remember { mutableStateOf("") }
+    var maxAge by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
 
     fun fetchAnimals() {
@@ -47,7 +53,10 @@ fun AnimalBrowseScreen(
             try {
                 val response = RetrofitClient.apiService.browseAnimals(
                     keyword = keyword.ifBlank { null },
-                    species = species.ifBlank { null }
+                    species = species.ifBlank { null },
+                    gender = gender.ifBlank { null },
+                    minAge = minAge.toIntOrNull(),
+                    maxAge = maxAge.toIntOrNull()
                 )
                 if (response.isSuccessful) animals = response.body() ?: emptyList()
             } catch (e: Exception) {
@@ -124,6 +133,31 @@ fun AnimalBrowseScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            ChoiceChipRow(
+                options = listOf("All" to "", "Male" to "MALE", "Female" to "FEMALE"),
+                selected = gender,
+                onSelect = { gender = it }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                LabeledTextField(
+                    label = "Min Age",
+                    value = minAge,
+                    onValueChange = { minAge = it },
+                    keyboardType = KeyboardType.Number,
+                    modifier = Modifier.weight(1f)
+                )
+                LabeledTextField(
+                    label = "Max Age",
+                    value = maxAge,
+                    onValueChange = { maxAge = it },
+                    keyboardType = KeyboardType.Number,
+                    modifier = Modifier.weight(1f)
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -134,7 +168,10 @@ fun AnimalBrowseScreen(
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedButton(
-                    onClick = { keyword = ""; species = ""; fetchAnimals() },
+                    onClick = {
+                        keyword = ""; species = ""; gender = ""; minAge = ""; maxAge = ""
+                        fetchAnimals()
+                    },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.weight(1f)
                 ) { Text("Reset") }

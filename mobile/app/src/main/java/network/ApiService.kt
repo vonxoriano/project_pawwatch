@@ -35,7 +35,10 @@ interface ApiService {
     @GET("api/animals/browse")
     suspend fun browseAnimals(
         @Query("keyword") keyword: String? = null,
-        @Query("species") species: String? = null
+        @Query("species") species: String? = null,
+        @Query("gender") gender: String? = null,
+        @Query("minAge") minAge: Int? = null,
+        @Query("maxAge") maxAge: Int? = null
     ): Response<List<Animal>>
 
     @GET("api/animals/{id}")
