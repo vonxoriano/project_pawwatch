@@ -65,7 +65,7 @@ fun AnimalBrowseScreen(
             .fillMaxSize()
             .background(PawWatchColors.Background)
     ) {
-        TopBar(onProfileClick = onProfileClick, onLogout = onLogout)
+        TopBar(showNotifications = true, onProfileClick = onProfileClick, onLogout = onLogout)
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row(

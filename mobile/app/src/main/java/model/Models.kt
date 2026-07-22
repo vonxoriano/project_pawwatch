@@ -77,3 +77,12 @@ data class Favorite(
     val user: ApplicationUser? = null,
     val dateAdded: String? = null
 )
+
+data class Notification(
+    val notificationId: Long,
+    val message: String,
+    val dateSent: String,
+    val status: String, // "UNREAD" or "READ"
+    val applicationId: Long? = null,
+    val user: ApplicationUser? = null
+)

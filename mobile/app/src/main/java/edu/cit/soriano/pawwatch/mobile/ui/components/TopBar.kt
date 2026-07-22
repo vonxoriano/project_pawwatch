@@ -11,10 +11,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.cit.soriano.pawwatch.mobile.ui.features.notification.NotificationBell
 import edu.cit.soriano.pawwatch.mobile.ui.theme.PawWatchColors
 
 @Composable
-fun TopBar(userLabel: String? = null, onProfileClick: (() -> Unit)? = null, onLogout: () -> Unit) {
+fun TopBar(
+    userLabel: String? = null,
+    showNotifications: Boolean = false,
+    onProfileClick: (() -> Unit)? = null,
+    onLogout: () -> Unit
+) {
     Surface(color = Color.White, shadowElevation = 2.dp) {
         Row(
             modifier = Modifier
@@ -33,6 +39,10 @@ fun TopBar(userLabel: String? = null, onProfileClick: (() -> Unit)? = null, onLo
                 userLabel?.let {
                     Text(it, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = PawWatchColors.TextDark)
                     Spacer(modifier = Modifier.width(12.dp))
+                }
+                if (showNotifications) {
+                    NotificationBell()
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
                 onProfileClick?.let { onClick ->
                     OutlinedButton(

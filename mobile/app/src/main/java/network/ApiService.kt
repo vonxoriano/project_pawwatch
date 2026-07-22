@@ -120,4 +120,21 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("animalId") animalId: Long
     ): Response<Boolean>
+
+    // Notifications - Adopter
+    @GET("api/notifications/me")
+    suspend fun getMyNotifications(
+        @Header("Authorization") token: String
+    ): Response<List<Notification>>
+
+    @PATCH("api/notifications/{id}/read")
+    suspend fun markNotificationAsRead(
+        @Header("Authorization") token: String,
+        @Path("id") id: Long
+    ): Response<Notification>
+
+    @PATCH("api/notifications/read-all")
+    suspend fun markAllNotificationsAsRead(
+        @Header("Authorization") token: String
+    ): Response<String>
 }
