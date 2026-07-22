@@ -40,6 +40,12 @@ body {
   margin-bottom: 8px;
 }
 
+.auth-logo .logo-icon-img {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+}
+
 .auth-logo h1 {
   font-size: 30px;
   font-weight: 800;
@@ -207,8 +213,9 @@ body {
   gap: 10px;
 }
 
-.dashboard-nav .nav-brand span {
-  font-size: 22px;
+.dashboard-nav .nav-brand .nav-logo {
+  width: 28px;
+  height: 28px;
 }
 
 .dashboard-nav h1 {

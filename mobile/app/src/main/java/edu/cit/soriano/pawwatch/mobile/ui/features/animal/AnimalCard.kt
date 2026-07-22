@@ -115,10 +115,12 @@ fun AnimalCard(
                         }
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            "View Profile →",
+                            "View →",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = PawWatchColors.Primary
+                            color = PawWatchColors.Primary,
+                            maxLines = 1,
+                            softWrap = false
                         )
                     }
                 }

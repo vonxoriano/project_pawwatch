@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.LoginRequest
 import edu.cit.soriano.pawwatch.mobile.network.RetrofitClient
+import edu.cit.soriano.pawwatch.mobile.ui.components.AppLogo
 import edu.cit.soriano.pawwatch.mobile.ui.components.LabeledTextField
 import edu.cit.soriano.pawwatch.mobile.ui.components.PrimaryButton
 import edu.cit.soriano.pawwatch.mobile.ui.components.loginFieldColors
@@ -56,7 +57,8 @@ fun LoginScreen(
                 modifier = Modifier.padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("🐾", fontSize = 26.sp)
+                AppLogo(size = 56.dp)
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     "PawWatch",
                     fontSize = 26.sp,

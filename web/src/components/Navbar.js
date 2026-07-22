@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import authService from '../features/auth/authService';
 import Modal from './Modal';
 import NotificationBell from '../features/notification/NotificationBell';
+import pawwatchLogo from '../pawwatch-logo.svg';
 
 function Navbar() {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ function Navbar() {
     return (
         <nav className="dashboard-nav">
             <div className="nav-brand">
-                <span>🐾</span>
+                <img src={pawwatchLogo} alt="PawWatch logo" className="nav-logo" />
                 <h1>PawWatch</h1>
             </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from './authService';
 import FormField from '../../components/FormField';
+import pawwatchLogo from '../../pawwatch-logo.svg';
 
 function Login() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="logo-icon">🐾</div>
+          <img src={pawwatchLogo} alt="PawWatch logo" className="logo-icon-img" />
           <h1>PawWatch</h1>
           <p>Animal Adoption Management System</p>
         </div>

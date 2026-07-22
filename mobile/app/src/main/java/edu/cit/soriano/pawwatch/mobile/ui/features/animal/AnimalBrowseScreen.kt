@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.model.Animal
@@ -76,128 +78,152 @@ fun AnimalBrowseScreen(
     ) {
         TopBar(showNotifications = true, onProfileClick = onProfileClick, onLogout = onLogout)
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "🐾 Find Your Companion",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = PawWatchColors.TextDark
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(
-                    onClick = onFavoritesClick,
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
-                ) {
-                    Text("❤️ Favorites", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                }
-                OutlinedButton(
-                    onClick = onMyApplicationsClick,
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
-                ) {
-                    Text("My Applications", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            OutlinedTextField(
-                value = keyword,
-                onValueChange = { keyword = it },
-                label = { Text("Search by name or breed") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                shape = RoundedCornerShape(10.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("" to "All", "CAT" to "🐱 Cats", "DOG" to "🐶 Dogs").forEach { (value, label) ->
-                    FilterChip(
-                        selected = species == value,
-                        onClick = { species = value },
-                        label = { Text(label) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = PawWatchColors.Primary,
-                            selectedLabelColor = Color.White
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "Find Your Companion",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PawWatchColors.TextDark
                         )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = onFavoritesClick,
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
+                        ) {
+                            Text("❤️ Favorites", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                        OutlinedButton(
+                            onClick = onMyApplicationsClick,
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary)
+                        ) {
+                            Text("My Applications", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    OutlinedTextField(
+                        value = keyword,
+                        onValueChange = { keyword = it },
+                        label = { Text("Search by name or breed") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(10.dp)
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("" to "All", "CAT" to "🐱 Cats", "DOG" to "🐶 Dogs").forEach { (value, label) ->
+                            FilterChip(
+                                selected = species == value,
+                                onClick = { species = value },
+                                label = { Text(label) },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = PawWatchColors.Primary,
+                                    selectedLabelColor = Color.White
+                                )
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    ChoiceChipRow(
+                        options = listOf("All" to "", "Male" to "MALE", "Female" to "FEMALE"),
+                        selected = gender,
+                        onSelect = { gender = it }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LabeledTextField(
+                            label = "Min Age",
+                            value = minAge,
+                            onValueChange = { minAge = it },
+                            keyboardType = KeyboardType.Number,
+                            modifier = Modifier.weight(1f)
+                        )
+                        LabeledTextField(
+                            label = "Max Age",
+                            value = maxAge,
+                            onValueChange = { maxAge = it },
+                            keyboardType = KeyboardType.Number,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        PrimaryButton(
+                            text = "Search",
+                            onClick = { fetchAnimals() },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.weight(1f)
+                        )
+                        OutlinedButton(
+                            onClick = {
+                                keyword = ""; species = ""; gender = ""; minAge = ""; maxAge = ""
+                                fetchAnimals()
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Clear", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
 
-            ChoiceChipRow(
-                options = listOf("All" to "", "Male" to "MALE", "Female" to "FEMALE"),
-                selected = gender,
-                onSelect = { gender = it }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                LabeledTextField(
-                    label = "Min Age",
-                    value = minAge,
-                    onValueChange = { minAge = it },
-                    keyboardType = KeyboardType.Number,
-                    modifier = Modifier.weight(1f)
-                )
-                LabeledTextField(
-                    label = "Max Age",
-                    value = maxAge,
-                    onValueChange = { maxAge = it },
-                    keyboardType = KeyboardType.Number,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                PrimaryButton(
-                    text = "Search",
-                    onClick = { fetchAnimals() },
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedButton(
-                    onClick = {
-                        keyword = ""; species = ""; gender = ""; minAge = ""; maxAge = ""
-                        fetchAnimals()
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f)
-                ) { Text("Reset") }
-            }
-        }
-
-        if (loading) {
-            LoadingIndicator()
-        } else if (animals.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No animals available right now.", color = PawWatchColors.TextGray)
-            }
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(animals) { animal ->
-                    AnimalCard(animal = animal, onClick = { onAnimalClick(animal.animalId) })
+            when {
+                loading -> item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadingIndicator()
+                    }
+                }
+                animals.isEmpty() -> item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "🐾 No animals found. Try adjusting your filters.",
+                            color = PawWatchColors.TextGray,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 32.dp)
+                        )
+                    }
+                }
+                else -> items(animals, key = { it.animalId }) { animal ->
+                    AnimalCard(
+                        animal = animal,
+                        onClick = { onAnimalClick(animal.animalId) }
+                    )
                 }
             }
         }
     }
 }
-
-// Animal feature slice - handles animal browsing and search

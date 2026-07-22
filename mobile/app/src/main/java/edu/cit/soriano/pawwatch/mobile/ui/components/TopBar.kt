@@ -1,14 +1,19 @@
 package edu.cit.soriano.pawwatch.mobile.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.cit.soriano.pawwatch.mobile.ui.features.notification.NotificationBell
@@ -21,6 +26,8 @@ fun TopBar(
     onProfileClick: (() -> Unit)? = null,
     onLogout: () -> Unit
 ) {
+    var menuExpanded by remember { mutableStateOf(false) }
+
     Surface(color = Color.White, shadowElevation = 2.dp) {
         Row(
             modifier = Modifier
@@ -33,37 +40,58 @@ fun TopBar(
                 "🐾 PawWatch",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = PawWatchColors.Primary
+                color = PawWatchColors.Primary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                userLabel?.let {
-                    Text(it, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = PawWatchColors.TextDark)
-                    Spacer(modifier = Modifier.width(12.dp))
-                }
                 if (showNotifications) {
                     NotificationBell()
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                onProfileClick?.let { onClick ->
-                    OutlinedButton(
-                        onClick = onClick,
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary),
-                        border = BorderStroke(1.dp, PawWatchColors.Primary),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
-                    ) {
-                        Text("Profile", fontSize = 13.sp)
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(
+                            Icons.Default.MoreVert,
+                            contentDescription = "More options",
+                            tint = PawWatchColors.Primary
+                        )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                OutlinedButton(
-                    onClick = onLogout,
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PawWatchColors.Primary),
-                    border = BorderStroke(1.dp, PawWatchColors.Primary),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
-                ) {
-                    Text("Log Out", fontSize = 13.sp)
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        userLabel?.let {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        it,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = PawWatchColors.TextDark
+                                    )
+                                },
+                                onClick = {},
+                                enabled = false
+                            )
+                        }
+                        onProfileClick?.let { onClick ->
+                            DropdownMenuItem(
+                                text = { Text("Profile") },
+                                onClick = {
+                                    menuExpanded = false
+                                    onClick()
+                                }
+                            )
+                        }
+                        DropdownMenuItem(
+                            text = { Text("Log Out") },
+                            onClick = {
+                                menuExpanded = false
+                                onLogout()
+                            }
+                        )
+                    }
                 }
             }
         }
